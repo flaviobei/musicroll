@@ -693,13 +693,11 @@ body.immersive-active {
   }
 
   .nav-brand .nav-logo {
-    width: 18px;
-    height: 18px;
+    display: none;
   }
 
   .user-avatar {
-    width: 20px;
-    height: 20px;
+    display: none;
   }
 }
 
