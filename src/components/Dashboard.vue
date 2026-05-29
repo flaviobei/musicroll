@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { supabase } from "../lib/supabase";
-import { Play, Music, Layers, PlusCircle, Clock } from "lucide-vue-next";
+import { Play, Music, Layers, PlusCircle, Clock } from "@lucide/vue";
 
 const props = defineProps({
   user: Object,
