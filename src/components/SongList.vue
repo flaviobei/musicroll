@@ -350,17 +350,37 @@ onUnmounted(() => {
 
     <!-- 2. DEFAULT LIST VIEW -->
     <div v-else class="glass-panel list-panel">
-      <h3 class="gradient-text-primary mb-4">Minhas Cifras</h3>
+      <h3 class="gradient-text-primary mb-4">{{ $t('songs.title') }}</h3>
+
+      <div class="search-sort-row">
+        <div class="search-bar">
+          <Search class="search-icon" :size="18" />
+          <input 
+            type="text" 
+            v-model="searchQuery" 
+            :placeholder="$t('songs.search')" 
+            class="search-input"
+          />
+        </div>
+        
+        <div class="sort-selector">
+          <Filter class="sort-icon text-muted" :size="18" />
+          <select v-model="sortBy" class="sort-select">
+            <option value="recent">{{ $t('songs.sortRecent') }}</option>
+            <option value="title">{{ $t('songs.sortTitle') }}</option>
+            <option value="artist">{{ $t('songs.sortArtist') }}</option>
+          </select>
+        </div>
+      </div>
 
       <div v-if="loading" class="loading-state">
         <span class="spinner"></span>
-        <span>Buscando cifras no banco de dados...</span>
+        <span>{{ $t('app.loading') }}</span>
       </div>
 
-      <div v-else-if="songs.length === 0" class="empty-state">
+      <div v-else-if="filteredSongs.length === 0" class="empty-state">
         <div class="empty-icon">🎵</div>
-        <p>Nenhuma música cadastrada ainda.</p>
-        <p class="sub">Utilize o formulário de cadastro acima para registrar sua primeira cifra!</p>
+        <p>{{ $t('songs.empty') }}</p>
       </div>
 
       <div v-else class="songs-grid">

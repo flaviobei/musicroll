@@ -17,8 +17,24 @@ import {
   Layers,
   PlayCircle,
   ArrowLeft,
-  X
+  X,
+  Globe
 } from "lucide-vue-next";
+import { useI18n } from 'vue-i18n';
+
+const { t, locale } = useI18n();
+
+const changeLanguage = (lang) => {
+  locale.value = lang;
+  localStorage.setItem('musicroll_lang', lang);
+};
+
+const cycleLanguage = () => {
+  const langs = ['pt', 'en', 'es'];
+  const currentIndex = langs.indexOf(locale.value);
+  const nextLang = langs[(currentIndex + 1) % langs.length];
+  changeLanguage(nextLang);
+};
 
 const user = ref(null);
 const currentView = ref('menu'); // views: menu, songs_list, song_create, setlists
@@ -120,8 +136,6 @@ const handleLogout = async () => {
   }
 };
 
-const songToEdit = ref(null);
-
 const onSongCreated = () => {
   addToast({
     type: "success",
@@ -201,16 +215,16 @@ const installApp = async () => {
       <div class="pwa-banner-content">
         <span class="pwa-icon">📱</span>
         <div class="pwa-text">
-          <strong>Instale o MusicRoll</strong>
-          <span v-if="!isIOS">Tenha o aplicativo na tela inicial do seu celular.</span>
-          <span v-else>Para instalar no iPhone, clique no ícone Compartilhar do Safari e em "Adicionar à Tela de Início".</span>
+          <strong>{{ $t('app.installTitle') }}</strong>
+          <span v-if="!isIOS">{{ $t('app.installAndroid') }}</span>
+          <span v-else>{{ $t('app.installIOS') }}</span>
         </div>
       </div>
       <div class="pwa-actions">
         <button v-if="!isIOS" @click="installApp" class="btn btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">
-          Instalar
+          {{ $t('app.install') }}
         </button>
-        <button @click="showInstallBanner = false" class="btn-icon-only text-muted" title="Fechar">
+        <button @click="showInstallBanner = false" class="btn-icon-only text-muted" :title="$t('app.close')">
           <X :size="18" />
         </button>
       </div>
@@ -241,24 +255,28 @@ const installApp = async () => {
         <template v-if="user">
           <div class="main-nav-links">
             <button @click="currentView = 'songs_list'" :class="{ 'text-primary': currentView === 'songs_list' }" class="btn-nav-link">
-              <BookOpen :size="16" /> Cifras
+              <BookOpen :size="16" /> {{ $t('dashboard.allSongs') }}
             </button>
             <button @click="currentView = 'setlists'" :class="{ 'text-primary': currentView === 'setlists' }" class="btn-nav-link">
-              <Layers :size="16" /> Setlists
+              <Layers :size="16" /> {{ $t('dashboard.mySetlists') }}
             </button>
             <button @click="currentView = 'song_create'; songToEdit = null" :class="{ 'text-primary': currentView === 'song_create' }" class="btn-nav-link">
-              <PlusCircle :size="16" /> Nova Cifra
+              <PlusCircle :size="16" /> {{ $t('dashboard.newSong') }}
+            </button>
+          </div>
+          
+          <div class="lang-switcher">
+            <button @click="cycleLanguage" class="btn-icon-only active-lang" title="Mudar Idioma">
+              {{ locale === 'pt' ? '🇧🇷' : locale === 'en' ? '🇺🇸' : '🇪🇸' }}
             </button>
           </div>
 
-          <div class="user-profile">
-            <User :size="16" class="profile-icon" />
+          <div class="user-menu">
             <span class="user-email">{{ user.email }}</span>
+            <button @click="handleLogout" class="btn-icon" :title="$t('app.logout')">
+              <LogOut :size="18" />
+            </button>
           </div>
-          <button @click="handleLogout" class="btn btn-secondary btn-nav">
-            <LogOut :size="16" />
-            <span>Sair</span>
-          </button>
         </template>
       </nav>
     </header>

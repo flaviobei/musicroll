@@ -364,9 +364,11 @@ onMounted(() => {
 
 <template>
   <div class="setlist-container">
-    <div class="glass-panel setlist-card">
-      <h3 class="gradient-text-primary mb-4">Gerenciador de Setlists</h3>
+    <div class="dashboard-header mb-4">
+      <h2 class="gradient-text-primary">{{ $t('setlists.title') }}</h2>
+    </div>
 
+    <div class="glass-panel setlist-card">
       <div v-if="!isDemo && !user" class="login-warning">
         <AlertCircle :size="24" class="warning-icon" />
         <div>
@@ -488,7 +490,9 @@ onMounted(() => {
                   <span class="spinner"></span>
                 </div>
                 <div v-else-if="activeSetlistSongs.length === 0" class="pane-empty">
-                  Arraste ou adicione músicas à direita.
+                  <div class="empty-state-mini mt-4">
+                    <p>{{ $t('setlists.emptySongs') }}</p>
+                  </div>
                 </div>
                 <div v-else class="setlist-songs-list">
                   <div 
@@ -574,8 +578,10 @@ onMounted(() => {
           </div>
 
           <div v-else class="no-set-selected">
-            <Layers :size="48" class="placeholder-icon" />
-            <p>Selecione ou crie uma Setlist na barra lateral para começar a organizar seu show!</p>
+            <div class="empty-state">
+              <Layers :size="48" class="empty-icon text-muted mb-2" />
+              <p>{{ $t('setlists.empty') }}</p>
+            </div>
           </div>
         </div>
 

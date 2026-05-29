@@ -182,9 +182,9 @@ const handleSubmit = async () => {
 <template>
   <div class="glass-panel form-card">
     <div class="form-header">
-      <h3 class="gradient-text-primary">{{ songToEdit ? 'Editar Cifra' : 'Cadastrar Nova Música' }}</h3>
+      <h3 class="gradient-text-primary">{{ songToEdit ? $t('songForm.editTitle') : $t('songForm.newTitle') }}</h3>
       <button v-if="!songToEdit" @click="loadSample" type="button" class="btn btn-secondary btn-sm">
-        💡 Carregar Exemplo
+        💡 {{ $t('songForm.loadSample') }}
       </button>
     </div>
 
@@ -192,7 +192,7 @@ const handleSubmit = async () => {
       <div class="row">
         <!-- Title Field -->
         <div class="form-group col-6">
-          <label class="form-label" for="song-title">Título da Música</label>
+          <label class="form-label" for="song-title">{{ $t('songForm.songName') }}</label>
           <div class="input-with-icon">
             <Music class="input-icon" :size="16" />
             <input 
@@ -208,7 +208,7 @@ const handleSubmit = async () => {
 
         <!-- Artist Field -->
         <div class="form-group col-6">
-          <label class="form-label" for="song-artist">Artista / Banda</label>
+          <label class="form-label" for="song-artist">{{ $t('songForm.artist') }}</label>
           <div class="input-with-icon">
             <User class="input-icon" :size="16" />
             <input 
@@ -226,7 +226,7 @@ const handleSubmit = async () => {
       <div class="row">
         <!-- Tone Field -->
         <div class="form-group col-6">
-          <label class="form-label" for="song-tone">Tom da Música (Opcional)</label>
+          <label class="form-label" for="song-tone">{{ $t('songForm.tone') }}</label>
           <div class="input-with-icon">
             <Music class="input-icon" :size="16" />
             <input 
@@ -241,7 +241,7 @@ const handleSubmit = async () => {
 
         <!-- Duration Field -->
         <div class="form-group col-6">
-          <label class="form-label" for="song-duration">Duração Estimada (Min)</label>
+          <label class="form-label" for="song-duration">{{ $t('songForm.duration') }}</label>
           <div class="input-with-icon">
             <Sliders class="input-icon" :size="16" />
             <input 
@@ -261,7 +261,7 @@ const handleSubmit = async () => {
         <div class="label-with-value">
           <label class="form-label" for="song-bpm">
             <Sliders :size="14" style="vertical-align: middle; margin-right: 4px;" />
-            BPM da Música (Rítmica/Batidas Por Minuto)
+            {{ $t('songForm.bpm') }}
           </label>
           <span class="speed-badge">{{ bpm }} BPM</span>
         </div>
@@ -282,28 +282,28 @@ const handleSubmit = async () => {
           </button>
           
           <div class="bpm-indicator">
-            <span v-if="bpm < 80" class="badge-dot dot-slow">🔵 Lento (< 80)</span>
-            <span v-else-if="bpm <= 120" class="badge-dot dot-medium">🟣 Médio (80-120)</span>
-            <span v-else class="badge-dot dot-fast">💗 Rápido (> 120)</span>
+            <span v-if="bpm < 80" class="badge-dot dot-slow">🔵 {{ $t('songForm.tempo.slow') }}</span>
+            <span v-else-if="bpm <= 120" class="badge-dot dot-medium">🟣 {{ $t('songForm.tempo.medium') }}</span>
+            <span v-else class="badge-dot dot-fast">💗 {{ $t('songForm.tempo.fast') }}</span>
           </div>
         </div>
       </div>
 
-      <!-- Cifra Content Textarea (Simple, no rich-text WYSIWYG) -->
+      <!-- Cifra Content Textarea -->
       <div class="form-group">
         <label class="form-label" for="song-content">
           <FileText :size="14" style="vertical-align: middle; margin-right: 4px;" />
-          Letra e Cifra Brutas (Monofont)
+          {{ $t('songForm.content') }}
         </label>
         <textarea 
           id="song-content" 
           v-model="content" 
-          placeholder="Cole aqui a cifra e letra. Dica: coloque os acordes exatamente alinhados por cima da letra." 
+          placeholder="Cole aqui a cifra e letra..." 
           class="form-textarea chord-textarea"
           required
         ></textarea>
         <span class="helper-text">
-          Nota: O texto será exibido exatamente como digitado usando fontes monoespaçadas, mantendo o alinhamento dos seus acordes.
+          {{ $t('songForm.helper') }}
         </span>
       </div>
 
@@ -311,12 +311,12 @@ const handleSubmit = async () => {
       <div class="form-group">
         <label class="form-label" for="song-notes">
           <FileText :size="14" style="vertical-align: middle; margin-right: 4px;" />
-          Anotações de Palco (Opcional)
+          {{ $t('songForm.notes') }}
         </label>
         <textarea 
           id="song-notes" 
           v-model="notes" 
-          placeholder="Ex: Entrar apenas bateria; Convenção no refrão..." 
+          placeholder="Ex: Convenção no refrão..." 
           class="form-input" 
           rows="2"
         ></textarea>
@@ -324,17 +324,15 @@ const handleSubmit = async () => {
 
       <!-- Submit Button -->
       <div class="form-actions">
-        <button v-if="songToEdit" type="button" @click="emit('cancel-edit')" class="btn btn-secondary" style="margin-right: 10px;">
-          Cancelar
+        <button type="button" @click="$emit('cancel')" class="btn btn-secondary" style="margin-right: 10px;">
+          {{ $t('songForm.cancel') }}
         </button>
         <button type="submit" class="btn btn-primary pulse-glow" :disabled="loading">
           <template v-if="loading">
-            <span class="spinner"></span>
-            Salvando Cifra...
+            <span class="spinner"></span> {{ $t('app.loading') }}
           </template>
           <template v-else>
-            <PlusCircle :size="18" />
-            {{ songToEdit ? 'Salvar Alterações' : 'Salvar Cifra' }}
+            <Save :size="16" /> {{ $t('songForm.save') }}
           </template>
         </button>
       </div>

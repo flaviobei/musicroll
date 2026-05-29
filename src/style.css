@@ -736,6 +736,30 @@ body.immersive-active {
   overflow: hidden;
 }
 
+.song-meta-small .user-email {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lang-switcher {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0 0.5rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.active-lang {
+  filter: brightness(1.2);
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
 .speed-badge-small {
   background: rgba(168, 85, 247, 0.15);
   border: 1px solid rgba(168, 85, 247, 0.3);

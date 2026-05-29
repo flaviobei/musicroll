@@ -69,10 +69,10 @@ const toggleMode = () => {
           <span class="music-icon">🎵</span>
         </div>
         <h2 class="gradient-text">MusicRoll</h2>
-        <p class="subtitle">Seu organizador inteligente de setlists e cifras</p>
+        <p class="subtitle">{{ $t('auth.subtitle') }}</p>
       </div>
 
-      <h3 class="form-title">{{ isSignUp ? 'Criar Nova Conta' : 'Entrar no MusicRoll' }}</h3>
+      <h3 class="form-title">{{ isSignUp ? $t('auth.signUpTitle') : $t('auth.signInTitle') }}</h3>
 
       <form @submit.prevent="handleAuth" class="auth-form">
         <!-- Feedback Messages -->
@@ -87,14 +87,14 @@ const toggleMode = () => {
 
         <!-- Email Field -->
         <div class="form-group">
-          <label class="form-label" for="email">E-mail</label>
+          <label class="form-label" for="email">{{ $t('auth.email') }}</label>
           <div class="input-with-icon">
             <Mail class="input-icon" :size="18" />
             <input 
               id="email" 
               type="email" 
               v-model="email" 
-              placeholder="exemplo@email.com" 
+              :placeholder="$t('auth.emailPlaceholder')" 
               class="form-input"
               required 
             />
@@ -103,14 +103,14 @@ const toggleMode = () => {
 
         <!-- Password Field -->
         <div class="form-group">
-          <label class="form-label" for="password">Senha</label>
+          <label class="form-label" for="password">{{ $t('auth.password') }}</label>
           <div class="input-with-icon">
             <Lock class="input-icon" :size="18" />
             <input 
               id="password" 
               type="password" 
               v-model="password" 
-              placeholder="Sua senha secreta" 
+              :placeholder="$t('auth.passwordPlaceholder')" 
               class="form-input"
               required 
             />
@@ -121,20 +121,20 @@ const toggleMode = () => {
         <button type="submit" class="btn btn-primary btn-block" :disabled="loading">
           <template v-if="loading">
             <span class="spinner"></span>
-            Carregando...
+            {{ $t('app.loading') }}
           </template>
           <template v-else>
             <component :is="isSignUp ? UserPlus : LogIn" :size="18" />
-            {{ isSignUp ? 'Cadastrar' : 'Entrar' }}
+            {{ isSignUp ? $t('auth.signUpBtn') : $t('auth.signInBtn') }}
           </template>
         </button>
       </form>
 
       <!-- Toggle Link -->
       <div class="auth-toggle">
-        <span>{{ isSignUp ? 'Já possui uma conta?' : 'Novo por aqui?' }}</span>
+        <span>{{ isSignUp ? $t('auth.hasAccount') : $t('auth.newHere') }}</span>
         <button @click="toggleMode" class="btn-toggle">
-          {{ isSignUp ? 'Faça login' : 'Crie uma conta' }}
+          {{ isSignUp ? $t('auth.clickLogin') : $t('auth.clickSignup') }}
         </button>
       </div>
       
