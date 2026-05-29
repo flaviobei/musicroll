@@ -249,6 +249,59 @@ h1, h2, h3, h4, h5, h6 {
   animation: pulseGlow 3s infinite;
 }
 
+/* PWA Install Banner */
+.pwa-install-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: var(--radius-md);
+  gap: 1rem;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.pwa-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.pwa-icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.pwa-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.pwa-text strong {
+  color: var(--text-main);
+  font-size: 1rem;
+}
+
+.pwa-text span {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.pwa-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 /* Custom Scrollbar for Pre and Layouts */
 ::-webkit-scrollbar {
   width: 8px;

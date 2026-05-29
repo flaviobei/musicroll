@@ -17,14 +17,49 @@ import {
   Layers,
   PlayCircle,
   ArrowLeft,
-} from "@lucide/vue";
+  X
+} from "lucide-vue-next";
 
 const user = ref(null);
-const authView = ref(false); // Toggle para ver tela de login/cadastro
+const currentView = ref('menu'); // views: menu, songs_list, song_create, setlists
+const songToEdit = ref(null);
 const songListRef = ref(null);
 
-// Roteador Interno por Cards: 'menu', 'songs_list', 'song_create', 'setlists'
-const currentView = ref("menu");
+// PWA Install State
+const deferredPrompt = ref(null);
+const showInstallBanner = ref(false);
+const isIOS = ref(false);
+
+onMounted(() => {
+  // Verificar se é iOS
+  const userAgent = window.navigator.userAgent.toLowerCase();
+  isIOS.value = /iphone|ipad|ipod/.test(userAgent);
+  
+  // Verificar se já está instalado (standalone)
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+  
+  // No iOS, se não estiver instalado, podemos mostrar uma dica manual
+  if (!isStandalone && isIOS.value) {
+    showInstallBanner.value = true;
+  }
+
+  // Capturar evento de instalação nativa no Android/Chrome
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt.value = e;
+    showInstallBanner.value = true;
+  });
+
+  // Check session on mount
+  supabase.auth.getSession().then(({ data: { session } }) => {
+    user.value = session?.user || null;
+  });
+
+  // Escutar mudanças de autenticação
+  supabase.auth.onAuthStateChange((_event, session) => {
+    user.value = session?.user || null;
+  });
+});
 
 // Toast State
 const toasts = ref([]);
@@ -145,10 +180,42 @@ const checkSupabaseConfigured = () => {
   const url = import.meta.env.VITE_SUPABASE_URL;
   return url && !url.includes("seu-projeto-supabase");
 };
+
+const installApp = async () => {
+  if (deferredPrompt.value) {
+    deferredPrompt.value.prompt();
+    const { outcome } = await deferredPrompt.value.userChoice;
+    if (outcome === 'accepted') {
+      showInstallBanner.value = false;
+    }
+    deferredPrompt.value = null;
+  }
+};
 </script>
 
 <template>
   <div class="app-container">
+    
+    <!-- PWA INSTALL BANNER -->
+    <div v-if="showInstallBanner" class="pwa-install-banner glass-panel">
+      <div class="pwa-banner-content">
+        <span class="pwa-icon">📱</span>
+        <div class="pwa-text">
+          <strong>Instale o MusicRoll</strong>
+          <span v-if="!isIOS">Tenha o aplicativo na tela inicial do seu celular.</span>
+          <span v-else>Para instalar no iPhone, clique no ícone Compartilhar do Safari e em "Adicionar à Tela de Início".</span>
+        </div>
+      </div>
+      <div class="pwa-actions">
+        <button v-if="!isIOS" @click="installApp" class="btn btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">
+          Instalar
+        </button>
+        <button @click="showInstallBanner = false" class="btn-icon-only text-muted" title="Fechar">
+          <X :size="18" />
+        </button>
+      </div>
+    </div>
+
     <!-- Navbar -->
     <header class="navbar glass-panel">
       <div

@@ -107,7 +107,7 @@ onMounted(() => {
         Bem-vindo, {{ user?.email?.split("@")[0] || "Músico" }}!
       </h2>
       <p class="text-muted">Aqui está um resumo do seu acervo musical.</p>
-      <br /><br />
+      <br />
     </div>
 
     <div class="quick-actions-row mb-4">
