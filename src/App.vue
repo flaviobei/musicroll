@@ -46,6 +46,19 @@ const deferredPrompt = ref(null);
 const showInstallBanner = ref(false);
 const isIOS = ref(false);
 
+// Global Error Catcher for Debugging
+const fatalError = ref(null);
+import { onErrorCaptured } from 'vue';
+onErrorCaptured((err, instance, info) => {
+  console.error("Vue Error Captured:", err, info);
+  fatalError.value = {
+    message: err.message || String(err),
+    info,
+    stack: err.stack
+  };
+  return false; // stop propagation
+});
+
 onMounted(() => {
   // Verificar se é iOS
   const userAgent = window.navigator.userAgent.toLowerCase();
@@ -309,8 +322,15 @@ const installApp = async () => {
 
     <!-- Main Content Area -->
     <main class="main-content">
+      <div v-if="fatalError" class="alert alert-danger-custom m-4" style="text-align:left; background: #331111; color: #ffaaaa; border: 1px solid red; padding: 20px;">
+        <h3 style="color:white; margin-bottom:10px;">🚨 Erro Crítico (Debug)</h3>
+        <p><strong>Mensagem:</strong> {{ fatalError.message }}</p>
+        <p><strong>Contexto:</strong> {{ fatalError.info }}</p>
+        <pre style="margin-top:10px; font-size:11px; white-space:pre-wrap; overflow-x:auto;">{{ fatalError.stack }}</pre>
+      </div>
+
       <!-- MODO DE AUTENTICAÇÃO -->
-      <transition name="fade" mode="out-in">
+      <transition v-else name="fade" mode="out-in">
         <div v-if="!user" key="auth">
           <AuthForm @auth-success="handleAuthSuccess" />
         </div>
