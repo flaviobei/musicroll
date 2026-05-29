@@ -448,9 +448,9 @@ body.immersive-active {
 /* Font Adjuster Adjustments for Mobile Controls */
 @media (max-width: 640px) {
   .player-panel {
-    background: transparent !important;
     border: none !important;
     box-shadow: none !important;
+    border-radius: 0 !important;
     padding: 0.5rem !important;
   }
 
@@ -655,18 +655,33 @@ body.immersive-active {
     padding: 0.5rem;
     justify-content: center;
   }
-  
+
   .btn-nav-link .nav-text {
     display: none;
   }
-  
+
   .version-tag {
     display: none;
   }
   
   .navbar {
-    padding: 0.6rem 1rem;
-    gap: 0.5rem;
+    padding: 0.3rem 0.5rem;
+    margin-bottom: 0.75rem;
+    gap: 0.3rem;
+  }
+
+  .nav-brand h1 {
+    font-size: 1.1rem;
+  }
+
+  .nav-brand .nav-logo {
+    width: 20px;
+    height: 20px;
+  }
+
+  .user-avatar {
+    width: 22px;
+    height: 22px;
   }
 }
 

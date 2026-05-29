@@ -617,9 +617,9 @@ onUnmounted(() => {
 @media (max-width: 640px) {
   .player-panel,
   .list-panel {
-    background: transparent;
     border: none;
     box-shadow: none;
+    border-radius: 0;
     padding: 0.5rem;
   }
 }
