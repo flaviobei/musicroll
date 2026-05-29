@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import './style.css'
+import 'flag-icons/css/flag-icons.min.css'
 import App from './App.vue'
 import i18n from './i18n'
 import { inject } from '@vercel/analytics'

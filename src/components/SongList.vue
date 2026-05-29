@@ -466,14 +466,13 @@ onUnmounted(() => {
       <h3 class="gradient-text-primary mb-4">{{ $t("songs.title") }}</h3>
 
       <div class="search-bar">
-        <Search class="search-icon" :size="18" />
+        <Search class="search-icon" :size="16" />
         <input
           type="text"
           v-model="searchQuery"
           :placeholder="$t('songs.search')"
           class="search-input"
         />
-        <br />
       </div>
 
       <div v-if="loading" class="loading-state">
@@ -565,6 +564,44 @@ onUnmounted(() => {
 <style scoped>
 .mb-4 {
   margin-bottom: 1.5rem;
+}
+
+.search-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.search-icon {
+  position: absolute;
+  left: 0.85rem;
+  color: var(--text-muted);
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+.search-input {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 0.9rem;
+  padding: 0.6rem 1rem 0.6rem 2.5rem;
+  transition: all 0.2s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px var(--accent-primary-glow);
+  background: rgba(15, 23, 42, 0.6);
+}
+
+.search-input::placeholder {
+  color: var(--text-muted);
 }
 
 .song-list-container {

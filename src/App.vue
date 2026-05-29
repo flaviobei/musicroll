@@ -284,13 +284,17 @@ const installApp = async () => {
               class="lang-btn"
               title="Mudar Idioma"
             >
-              {{ locale === "pt" ? "🇧🇷" : locale === "en" ? "🇺🇸" : "🇪🇸" }}
+              <span
+                class="fi"
+                :class="locale === 'pt' ? 'fi-br' : locale === 'en' ? 'fi-us' : 'fi-es'"
+              ></span>
             </button>
           </div>
 
           <div class="user-menu">
-            <span class="user-email">{{ user.email }}</span>
-
+            <div class="user-avatar" :title="user.email">
+              <User :size="16" />
+            </div>
             <button
               @click="handleLogout"
               class="btn-icon"
@@ -416,8 +420,8 @@ const installApp = async () => {
   justify-content: space-between;
   align-items: center;
   border-radius: var(--radius-md);
-  margin-bottom: 2rem;
-  padding: 1rem 2rem;
+  margin-bottom: 1.25rem;
+  padding: 0.6rem 1.5rem;
 }
 
 .nav-brand {
@@ -428,7 +432,7 @@ const installApp = async () => {
 }
 
 .nav-logo {
-  font-size: 1.6rem;
+  font-size: 1.25rem;
 }
 
 .version-tag {
@@ -476,6 +480,45 @@ const installApp = async () => {
 .user-email {
   font-size: 0.85rem;
   color: var(--text-main);
+}
+
+.user-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(139, 92, 246, 0.15);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  color: #c084fc;
+  cursor: default;
+  flex-shrink: 0;
+}
+
+.user-menu {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.btn-icon {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.35rem;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.btn-icon:hover {
+  color: var(--accent-danger);
+  background: rgba(239, 68, 68, 0.08);
 }
 
 .btn-nav {
