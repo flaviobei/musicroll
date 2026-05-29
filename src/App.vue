@@ -1,6 +1,5 @@
 <script setup>
 import { ref, onMounted, nextTick } from "vue";
-import { Analytics } from "@vercel/analytics/next";
 import { supabase } from "./lib/supabase";
 import AuthForm from "./components/AuthForm.vue";
 import SongForm from "./components/SongForm.vue";
@@ -149,14 +148,12 @@ const handleEditSong = (song) => {
 
 const handlePlaySong = async (song) => {
   currentView.value = "songs_list";
-  await nextTick();
-  if (songListRef.value) {
-    songListRef.value.openPlayer(song);
-  } else {
-    setTimeout(() => {
-      if (songListRef.value) songListRef.value.openPlayer(song);
-    }, 300);
-  }
+  // Aguarda a transição de 250ms completar antes de chamar openPlayer
+  setTimeout(() => {
+    if (songListRef.value) {
+      songListRef.value.openPlayer(song);
+    }
+  }, 350);
 };
 
 const handleCancelEdit = () => {
@@ -293,6 +290,7 @@ const installApp = async () => {
 
           <div class="user-menu">
             <span class="user-email">{{ user.email }}</span>
+
             <button
               @click="handleLogout"
               class="btn-icon"
@@ -309,12 +307,12 @@ const installApp = async () => {
     <main class="main-content">
       <!-- MODO DE AUTENTICAÇÃO -->
       <transition name="fade" mode="out-in">
-        <div v-if="!user">
+        <div v-if="!user" key="auth">
           <AuthForm @auth-success="handleAuthSuccess" />
         </div>
 
         <!-- DASHBOARD (PÁGINA PRINCIPAL APÓS LOGIN) -->
-        <div v-else-if="currentView === 'menu'">
+        <div v-else-if="currentView === 'menu'" key="menu">
           <Dashboard
             :user="user"
             @navigate="(v) => (currentView = v)"
@@ -325,7 +323,7 @@ const installApp = async () => {
         </div>
 
         <!-- MODO DE CADASTRO DE MÚSICAS -->
-        <div v-else-if="currentView === 'song_create'">
+        <div v-else-if="currentView === 'song_create'" key="song_create">
           <div class="back-bar mb-4">
             <button @click="handleCancelEdit" class="btn btn-secondary btn-sm">
               <ArrowLeft :size="16" />
@@ -342,7 +340,7 @@ const installApp = async () => {
         </div>
 
         <!-- MODO DE ACERVO / PLAYER DE CIFRAS -->
-        <div v-else-if="currentView === 'songs_list'">
+        <div v-else-if="currentView === 'songs_list'" key="songs_list">
           <div class="back-bar mb-4" v-if="!songListRef?.activeSong">
             <button
               @click="currentView = 'menu'"
@@ -361,7 +359,7 @@ const installApp = async () => {
         </div>
 
         <!-- MODO DE GERENCIADOR DE SETLISTS -->
-        <div v-else-if="currentView === 'setlists'">
+        <div v-else-if="currentView === 'setlists'" key="setlists">
           <div class="back-bar mb-4">
             <button
               @click="currentView = 'menu'"

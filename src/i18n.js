@@ -54,9 +54,20 @@ const messages = {
       editTitle: 'Editar Cifra',
       songName: 'Título da Música',
       artist: 'Artista',
+      tone: 'Tom',
+      duration: 'Duração (min)',
+      bpm: 'BPM (Velocidade)',
       content: 'Conteúdo (Cifra/Letra)',
+      notes: 'Observações / Convenção',
+      helper: 'Use acordes no formato Am, G7, C#m. Cole a cifra completa com letra.',
       save: 'Salvar Cifra',
-      cancel: 'Cancelar'
+      cancel: 'Cancelar',
+      loadSample: 'Carregar Exemplo',
+      tempo: {
+        slow: 'Lento',
+        medium: 'Médio',
+        fast: 'Rápido'
+      }
     },
     setlists: {
       title: 'Meus Setlists',
@@ -125,9 +136,20 @@ const messages = {
       editTitle: 'Edit Song',
       songName: 'Song Title',
       artist: 'Artist',
+      tone: 'Key / Tone',
+      duration: 'Duration (min)',
+      bpm: 'BPM (Tempo)',
       content: 'Content (Chords/Lyrics)',
+      notes: 'Notes / Convention',
+      helper: 'Use chords in Am, G7, C#m format. Paste the full chord chart with lyrics.',
       save: 'Save Song',
-      cancel: 'Cancel'
+      cancel: 'Cancel',
+      loadSample: 'Load Sample',
+      tempo: {
+        slow: 'Slow',
+        medium: 'Medium',
+        fast: 'Fast'
+      }
     },
     setlists: {
       title: 'My Setlists',
@@ -196,9 +218,20 @@ const messages = {
       editTitle: 'Editar Canción',
       songName: 'Título de la Canción',
       artist: 'Artista',
+      tone: 'Tonalidad',
+      duration: 'Duración (min)',
+      bpm: 'BPM (Tempo)',
       content: 'Contenido (Acordes/Letra)',
+      notes: 'Notas / Convención',
+      helper: 'Usa acordes en formato Am, G7, C#m. Pega la cifra completa con letra.',
       save: 'Guardar Canción',
-      cancel: 'Cancelar'
+      cancel: 'Cancelar',
+      loadSample: 'Cargar Ejemplo',
+      tempo: {
+        slow: 'Lento',
+        medium: 'Medio',
+        fast: 'Rápido'
+      }
     },
     setlists: {
       title: 'Mis Setlists',
