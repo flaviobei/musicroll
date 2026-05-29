@@ -3,7 +3,7 @@ import { ref, onMounted, computed } from 'vue'
 import { supabase } from '../lib/supabase'
 import { 
   Plus, Trash2, FolderPlus, Music, ChevronUp, ChevronDown, 
-  X, Check, Layers, AlertCircle, PlayCircle
+  X, Check, Layers, AlertCircle, PlayCircle, Search
 } from '@lucide/vue'
 
 const props = defineProps({
@@ -23,6 +23,21 @@ const activeSetlistSongs = ref([])
 const newSetName = ref('')
 const loading = ref(false)
 const loadingSongs = ref(false)
+
+const searchAcervo = ref('')
+
+const isSongAdded = (song) => {
+  return activeSetlistSongs.value.some(s => s.song_id === song.id || s.id === song.id)
+}
+
+const filteredAcervo = computed(() => {
+  if (!searchAcervo.value) return availableSongs.value
+  const q = searchAcervo.value.toLowerCase()
+  return availableSongs.value.filter(s => 
+    s.title?.toLowerCase().includes(q) || 
+    s.artist?.toLowerCase().includes(q)
+  )
+})
 
 const totalDuration = computed(() => {
   return activeSetlistSongs.value.reduce((acc, song) => acc + Number(song.duration || 4), 0)
@@ -548,16 +563,30 @@ onMounted(() => {
 
               <!-- MÚSICAS DISPONÍVEIS PARA ADICIONAR -->
               <div class="available-songs-pane">
-                <h5 class="sub-pane-title">Acervo de Músicas</h5>
-                <div v-if="availableSongs.length === 0" class="pane-empty">
-                  Nenhuma música cadastrada no acervo.
+                <div class="sub-pane-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                  <h5 class="sub-pane-title" style="margin: 0;">Acervo</h5>
+                  <div class="search-small">
+                    <Search :size="14" class="search-icon-small" />
+                    <input 
+                      v-model="searchAcervo" 
+                      type="text" 
+                      placeholder="Buscar música..." 
+                      class="input-search-small"
+                    />
+                  </div>
+                </div>
+
+                <div v-if="filteredAcervo.length === 0" class="pane-empty">
+                  <span v-if="searchAcervo">Nenhuma música encontrada na busca.</span>
+                  <span v-else>Nenhuma música cadastrada no acervo.</span>
                 </div>
                 <div v-else class="available-songs-list">
                   <div 
-                    v-for="song in availableSongs" 
+                    v-for="song in filteredAcervo" 
                     :key="song.id" 
                     class="available-song-item"
                     :class="{
+                      'song-added': isSongAdded(song),
                       'bpm-azul': Number(song.bpm || 120) < 50,
                       'bpm-verde': Number(song.bpm || 120) >= 50 && Number(song.bpm || 120) < 90,
                       'bpm-laranja': Number(song.bpm || 120) >= 90 && Number(song.bpm || 120) <= 120,
@@ -568,8 +597,21 @@ onMounted(() => {
                       <h6>{{ song.title }}</h6>
                       <p>{{ song.artist }}</p>
                     </div>
-                    <button @click="addSongToSetlist(song)" class="btn-add-song" title="Adicionar à Setlist">
+                    <button 
+                      v-if="!isSongAdded(song)"
+                      @click="addSongToSetlist(song)" 
+                      class="btn-add-song" 
+                      title="Adicionar à Setlist"
+                    >
                       <Plus :size="14" />
+                    </button>
+                    <button 
+                      v-else
+                      disabled
+                      class="btn-add-song added" 
+                      title="Já adicionada"
+                    >
+                      <Check :size="14" />
                     </button>
                   </div>
                 </div>
@@ -929,6 +971,41 @@ onMounted(() => {
 
 .setlist-song-item:hover, .available-song-item:hover {
   border-color: rgba(255, 255, 255, 0.08);
+}
+
+.song-added {
+  opacity: 0.4;
+  filter: grayscale(1);
+  pointer-events: none;
+}
+
+.search-small {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon-small {
+  position: absolute;
+  left: 0.5rem;
+  color: var(--text-muted);
+}
+
+.input-search-small {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  padding: 0.3rem 0.5rem 0.3rem 1.8rem;
+  color: var(--text-main);
+  font-size: 0.8rem;
+  width: 140px;
+  transition: width var(--transition-fast);
+}
+
+.input-search-small:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  width: 180px;
 }
 
 .bpm-azul { border-left: 3px solid #3b82f6 !important; }
