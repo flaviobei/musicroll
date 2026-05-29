@@ -53,6 +53,7 @@ const fetchSongs = async () => {
     const { data, error } = await supabase
       .from('songs')
       .select('*')
+      .eq('user_id', props.user.id)
       .order('created_at', { ascending: false })
 
     if (error) throw error
