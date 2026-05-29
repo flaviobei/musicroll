@@ -30,15 +30,15 @@ const messages = {
       welcome: 'Bem-vindo, {name}!',
       subtitle: 'Aqui está um resumo do seu acervo musical.',
       newSong: 'Nova Cifra',
-      allSongs: 'Todas as Cifras',
-      mySetlists: 'Meus Setlists',
+      allSongs: 'Cifras',
+      mySetlists: 'Setlists',
       latestSongs: 'Últimas Cifras Adicionadas',
       latestSetlists: 'Setlists Recentes',
       emptySongs: 'Nenhuma música cadastrada ainda.',
       emptySetlists: 'Nenhum setlist criado ainda.'
     },
     songs: {
-      title: 'Minhas Cifras',
+      title: 'Cifras',
       search: 'Buscar cifra ou artista...',
       sortTitle: 'Título',
       sortArtist: 'Artista',
