@@ -18,15 +18,20 @@ export default defineConfig({
         orientation: 'portrait',
         icons: [
           {
-            src: '/logo.png',
-            sizes: '192x192',
+            src: '/logo512.png',
+            sizes: '512x512',
             type: 'image/png'
           },
           {
-            src: '/logo.png',
-            sizes: '512x512',
+            src: '/logo1024.png',
+            sizes: '1024x1024',
             type: 'image/png',
             purpose: 'any maskable'
+          },
+          {
+            src: '/logo.png',
+            sizes: '1500x1500',
+            type: 'image/png'
           }
         ]
       },
