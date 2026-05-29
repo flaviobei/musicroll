@@ -3,7 +3,7 @@ import { ref, onMounted, computed } from 'vue'
 import { supabase } from '../lib/supabase'
 import { 
   Plus, Trash2, FolderPlus, Music, ChevronUp, ChevronDown, 
-  X, Check, Layers, AlertCircle, PlayCircle, Search
+  X, Check, Layers, AlertCircle, PlayCircle, Search, Edit3
 } from '@lucide/vue'
 
 const props = defineProps({
@@ -173,6 +173,56 @@ const createSetlist = async () => {
     emit('show-notification', { type: 'success', message: 'Setlist criada com sucesso!' })
   } catch (error) {
     emit('show-notification', { type: 'error', message: 'Erro ao criar setlist.' })
+  }
+}
+
+const editingSetName = ref(false)
+const newEditName = ref('')
+
+const startEditingName = () => {
+  newEditName.value = activeSetlist.value.name
+  editingSetName.value = true
+}
+
+const saveEditName = async () => {
+  if (!newEditName.value.trim() || newEditName.value === activeSetlist.value.name) {
+    editingSetName.value = false
+    return
+  }
+  
+  const updatedName = newEditName.value.trim()
+  
+  try {
+    if (isDemo) {
+      const local = localStorage.getItem('musicroll_setlists')
+      let localSetlists = local ? JSON.parse(local) : []
+      const index = localSetlists.findIndex(s => s.id === activeSetlist.value.id)
+      if (index !== -1) {
+        localSetlists[index].name = updatedName
+        localStorage.setItem('musicroll_setlists', JSON.stringify(localSetlists))
+        setlists.value = localSetlists
+        activeSetlist.value.name = updatedName
+      }
+    } else {
+      const { error } = await supabase
+        .from('setlists')
+        .update({ name: updatedName })
+        .eq('id', activeSetlist.value.id)
+
+      if (error) throw error
+      
+      const index = setlists.value.findIndex(s => s.id === activeSetlist.value.id)
+      if (index !== -1) {
+        setlists.value[index].name = updatedName
+      }
+      activeSetlist.value.name = updatedName
+    }
+    emit('show-notification', { type: 'success', message: 'Setlist renomeada com sucesso!' })
+  } catch (error) {
+    console.error('Erro ao renomear setlist:', error)
+    emit('show-notification', { type: 'error', message: 'Erro ao renomear setlist.' })
+  } finally {
+    editingSetName.value = false
   }
 }
 
@@ -451,8 +501,24 @@ onMounted(() => {
         <div class="setlist-details">
           <div v-if="activeSetlist" class="active-set-pane">
             <div class="set-header">
-              <div>
-                <h4>📂 {{ activeSetlist.name }}</h4>
+              <div v-if="editingSetName" style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                <input 
+                  v-model="newEditName" 
+                  class="input-custom" 
+                  style="font-size: 1.1rem; font-weight: bold; width: 220px; padding: 0.3rem 0.5rem;"
+                  @keyup.enter="saveEditName"
+                  @keyup.esc="editingSetName = false"
+                />
+                <button @click="saveEditName" class="btn btn-primary btn-icon-only" title="Salvar"><Check :size="16" /></button>
+                <button @click="editingSetName = false" class="btn btn-secondary btn-icon-only" title="Cancelar"><X :size="16" /></button>
+              </div>
+              <div v-else>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                  <h4>📂 {{ activeSetlist.name }}</h4>
+                  <button @click="startEditingName" class="btn-icon" style="padding: 0.2rem; color: var(--text-muted);" title="Renomear Setlist">
+                    <Edit3 :size="16" />
+                  </button>
+                </div>
                 <span class="song-count">{{ activeSetlistSongs.length }} música(s)</span>
               </div>
               <button 
