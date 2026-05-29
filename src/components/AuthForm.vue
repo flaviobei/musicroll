@@ -138,11 +138,6 @@ const toggleMode = () => {
         </button>
       </div>
       
-      <!-- Informational Box about Supabase Connection -->
-      <div class="env-info">
-        <Info :size="14" class="info-icon" />
-        <span>Para persistência real de dados, configure as chaves do Supabase no arquivo `.env` na raiz do projeto.</span>
-      </div>
     </div>
   </div>
 </template>
@@ -271,24 +266,7 @@ const toggleMode = () => {
   font-weight: bold;
 }
 
-.env-info {
-  margin-top: 2rem;
-  padding: 0.75rem;
-  background: rgba(59, 130, 246, 0.05);
-  border: 1px dashed rgba(59, 130, 246, 0.2);
-  border-radius: var(--radius-sm);
-  display: flex;
-  gap: 0.5rem;
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  line-height: 1.4;
-}
 
-.info-icon {
-  color: #60a5fa;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
 
 /* Spinner animation */
 .spinner {
