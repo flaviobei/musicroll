@@ -201,6 +201,7 @@ const handleSubmit = async () => {
               v-model="title" 
               placeholder="Ex: Hotel California" 
               class="form-input"
+              maxlength="200"
               required 
             />
           </div>
@@ -217,6 +218,7 @@ const handleSubmit = async () => {
               v-model="artist" 
               placeholder="Ex: Eagles" 
               class="form-input"
+              maxlength="200"
               required 
             />
           </div>
@@ -235,6 +237,7 @@ const handleSubmit = async () => {
               v-model="tone" 
               placeholder="Ex: C, F#m" 
               class="form-input"
+              maxlength="20"
             />
           </div>
         </div>
@@ -300,6 +303,7 @@ const handleSubmit = async () => {
           v-model="content" 
           placeholder="Cole aqui a cifra e letra..." 
           class="form-textarea chord-textarea"
+          maxlength="100000"
           required
         ></textarea>
         <span class="helper-text">
@@ -319,6 +323,7 @@ const handleSubmit = async () => {
           placeholder="Ex: Convenção no refrão..." 
           class="form-input" 
           rows="2"
+          maxlength="1000"
         ></textarea>
       </div>
 
