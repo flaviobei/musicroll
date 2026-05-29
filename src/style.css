@@ -644,9 +644,16 @@ body.immersive-active {
   .main-nav-links {
     display: flex;
     gap: 0.25rem;
-    margin-right: 0.5rem;
-    padding-right: 0.5rem;
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    margin-right: 0;
+    padding-right: 0;
+    border-right: none;
+  }
+
+  .lang-switcher {
+    border-left: none;
+    border-right: none;
+    padding: 0;
+    margin: 0;
   }
 
   .btn-nav-link {
@@ -686,6 +693,20 @@ body.immersive-active {
 
   .main-content {
     padding: 0.5rem;
+  }
+
+  .back-bar {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem !important;
+  }
+
+  .back-bar .btn {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.75rem;
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-muted);
   }
 
   .nav-brand h1 {
