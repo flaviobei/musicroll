@@ -269,15 +269,17 @@ const installApp = async () => {
               @click="currentView = 'songs_list'"
               :class="{ 'text-primary': currentView === 'songs_list' }"
               class="btn-nav-link"
+              :title="$t('dashboard.allSongs')"
             >
-              <BookOpen :size="16" /> {{ $t("dashboard.allSongs") }}
+              <BookOpen :size="16" /> <span class="nav-text">{{ $t("dashboard.allSongs") }}</span>
             </button>
             <button
               @click="currentView = 'setlists'"
               :class="{ 'text-primary': currentView === 'setlists' }"
               class="btn-nav-link"
+              :title="$t('dashboard.mySetlists')"
             >
-              <Layers :size="16" /> {{ $t("dashboard.mySetlists") }}
+              <Layers :size="16" /> <span class="nav-text">{{ $t("dashboard.mySetlists") }}</span>
             </button>
             <button
               @click="
@@ -286,8 +288,9 @@ const installApp = async () => {
               "
               :class="{ 'text-primary': currentView === 'song_create' }"
               class="btn-nav-link"
+              :title="$t('dashboard.newSong')"
             >
-              <PlusCircle :size="16" /> {{ $t("dashboard.newSong") }}
+              <PlusCircle :size="16" /> <span class="nav-text">{{ $t("dashboard.newSong") }}</span>
             </button>
           </div>
 
