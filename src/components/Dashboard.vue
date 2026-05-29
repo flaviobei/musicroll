@@ -104,10 +104,14 @@ onMounted(() => {
   <div class="dashboard-panel glass-panel">
     <div class="dashboard-header mb-4">
       <h2 class="gradient-text-primary">
-        {{ $t('dashboard.welcome', { name: user?.email?.split("@")[0] || "Músico" }) }}
+        {{
+          $t("dashboard.welcome", {
+            name: user?.email?.split("@")[0] || "Músico",
+          })
+        }}
       </h2>
-      <p class="text-muted">{{ $t('dashboard.subtitle') }}</p>
-      <br /><br />
+      <p class="text-muted">{{ $t("dashboard.subtitle") }}</p>
+      <br />
     </div>
 
     <div class="quick-actions-row mb-4">
@@ -115,36 +119,36 @@ onMounted(() => {
         @click="$emit('navigate', 'song_create')"
         class="btn btn-secondary btn-action"
       >
-        <PlusCircle :size="18" /> {{ $t('dashboard.newSong') }}
+        <PlusCircle :size="18" /> {{ $t("dashboard.newSong") }}
       </button>
       <button
         @click="$emit('navigate', 'songs_list')"
         class="btn btn-secondary btn-action"
       >
-        <Music :size="18" /> {{ $t('dashboard.allSongs') }}
+        <Music :size="18" /> {{ $t("dashboard.allSongs") }}
       </button>
       <button
         @click="$emit('navigate', 'setlists')"
         class="btn btn-secondary btn-action"
       >
-        <Layers :size="18" /> {{ $t('dashboard.mySetlists') }}
+        <Layers :size="18" /> {{ $t("dashboard.mySetlists") }}
       </button>
     </div>
 
     <div v-if="loading" class="loading-state">
       <span class="spinner"></span>
-      <span>{{ $t('app.loading') }}</span>
+      <span>{{ $t("app.loading") }}</span>
     </div>
 
     <div v-else class="dashboard-content-grid">
       <!-- Ultimas Musicas -->
       <div class="dashboard-card">
         <h3 class="dashboard-card-title">
-          <Clock :size="18" /> {{ $t('dashboard.latestSongs') }}
+          <Clock :size="18" /> {{ $t("dashboard.latestSongs") }}
         </h3>
 
         <div v-if="recentSongs.length === 0" class="empty-state-mini">
-          {{ $t('dashboard.emptySongs') }}
+          {{ $t("dashboard.emptySongs") }}
         </div>
 
         <div v-else class="recent-list">
@@ -186,11 +190,11 @@ onMounted(() => {
       <!-- Ultimos Setlists -->
       <div class="dashboard-card">
         <h3 class="dashboard-card-title">
-          <Clock :size="18" /> {{ $t('dashboard.latestSetlists') }}
+          <Clock :size="18" /> {{ $t("dashboard.latestSetlists") }}
         </h3>
 
         <div v-if="recentSetlists.length === 0" class="empty-state-mini">
-          {{ $t('dashboard.emptySetlists') }}
+          {{ $t("dashboard.emptySetlists") }}
         </div>
 
         <div v-else class="recent-list">

@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, nextTick } from "vue";
+import { Analytics } from "@vercel/analytics/next";
 import { supabase } from "./lib/supabase";
 import AuthForm from "./components/AuthForm.vue";
 import SongForm from "./components/SongForm.vue";
@@ -18,26 +19,26 @@ import {
   PlayCircle,
   ArrowLeft,
   X,
-  Globe
+  Globe,
 } from "lucide-vue-next";
-import { useI18n } from 'vue-i18n';
+import { useI18n } from "vue-i18n";
 
 const { t, locale } = useI18n();
 
 const changeLanguage = (lang) => {
   locale.value = lang;
-  localStorage.setItem('musicroll_lang', lang);
+  localStorage.setItem("musicroll_lang", lang);
 };
 
 const cycleLanguage = () => {
-  const langs = ['pt', 'en', 'es'];
+  const langs = ["pt", "en", "es"];
   const currentIndex = langs.indexOf(locale.value);
   const nextLang = langs[(currentIndex + 1) % langs.length];
   changeLanguage(nextLang);
 };
 
 const user = ref(null);
-const currentView = ref('menu'); // views: menu, songs_list, song_create, setlists
+const currentView = ref("menu"); // views: menu, songs_list, song_create, setlists
 const songToEdit = ref(null);
 const songListRef = ref(null);
 
@@ -50,28 +51,33 @@ onMounted(() => {
   // Verificar se é iOS
   const userAgent = window.navigator.userAgent.toLowerCase();
   isIOS.value = /iphone|ipad|ipod/.test(userAgent);
-  
+
   // Verificar se já está instalado (standalone)
-  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-  
+  const isStandalone =
+    window.matchMedia("(display-mode: standalone)").matches ||
+    window.navigator.standalone;
+
   // No iOS, se não estiver instalado, podemos mostrar uma dica manual
   if (!isStandalone && isIOS.value) {
     showInstallBanner.value = true;
   }
 
   // Capturar evento de instalação nativa no Android/Chrome
-  window.addEventListener('beforeinstallprompt', (e) => {
+  window.addEventListener("beforeinstallprompt", (e) => {
     e.preventDefault();
     deferredPrompt.value = e;
     showInstallBanner.value = true;
   });
 
   // Check session on mount
-  supabase.auth.getSession().then(({ data: { session } }) => {
-    user.value = session?.user || null;
-  }).catch(error => {
-    console.warn('Erro ao verificar sessão:', error);
-  });
+  supabase.auth
+    .getSession()
+    .then(({ data: { session } }) => {
+      user.value = session?.user || null;
+    })
+    .catch((error) => {
+      console.warn("Erro ao verificar sessão:", error);
+    });
 
   // Escutar mudanças de autenticação
   supabase.auth.onAuthStateChange((_event, session) => {
@@ -101,10 +107,9 @@ const handleNotification = (payload) => {
   });
 };
 
-
 const handleAuthSuccess = (authUser) => {
   user.value = authUser;
-  currentView.value = 'menu';
+  currentView.value = "menu";
   addToast({ type: "success", message: `Bem-vindo, ${authUser.email}!` });
   if (songListRef.value) {
     songListRef.value.refresh();
@@ -174,7 +179,8 @@ const handleOpenPresentation = (payload) => {
     } else {
       // Fallback
       setTimeout(() => {
-        if (songListRef.value) songListRef.value.openPlayer(payload.songs[0], payload.songs);
+        if (songListRef.value)
+          songListRef.value.openPlayer(payload.songs[0], payload.songs);
       }, 300);
     }
   }, 400);
@@ -189,7 +195,7 @@ const installApp = async () => {
   if (deferredPrompt.value) {
     deferredPrompt.value.prompt();
     const { outcome } = await deferredPrompt.value.userChoice;
-    if (outcome === 'accepted') {
+    if (outcome === "accepted") {
       showInstallBanner.value = false;
     }
     deferredPrompt.value = null;
@@ -199,22 +205,30 @@ const installApp = async () => {
 
 <template>
   <div class="app-container">
-    
     <!-- PWA INSTALL BANNER -->
     <div v-if="showInstallBanner" class="pwa-install-banner glass-panel">
       <div class="pwa-banner-content">
         <span class="pwa-icon">📱</span>
         <div class="pwa-text">
-          <strong>{{ $t('app.installTitle') }}</strong>
-          <span v-if="!isIOS">{{ $t('app.installAndroid') }}</span>
-          <span v-else>{{ $t('app.installIOS') }}</span>
+          <strong>{{ $t("app.installTitle") }}</strong>
+          <span v-if="!isIOS">{{ $t("app.installAndroid") }}</span>
+          <span v-else>{{ $t("app.installIOS") }}</span>
         </div>
       </div>
       <div class="pwa-actions">
-        <button v-if="!isIOS" @click="installApp" class="btn btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">
-          {{ $t('app.install') }}
+        <button
+          v-if="!isIOS"
+          @click="installApp"
+          class="btn btn-primary"
+          style="padding: 0.4rem 0.8rem; font-size: 0.8rem"
+        >
+          {{ $t("app.install") }}
         </button>
-        <button @click="showInstallBanner = false" class="btn-icon-only text-muted" :title="$t('app.close')">
+        <button
+          @click="showInstallBanner = false"
+          class="btn-icon-only text-muted"
+          :title="$t('app.close')"
+        >
           <X :size="18" />
         </button>
       </div>
@@ -222,10 +236,7 @@ const installApp = async () => {
 
     <!-- Navbar -->
     <header class="navbar glass-panel">
-      <div
-        class="nav-brand"
-        @click="currentView = 'menu'"
-      >
+      <div class="nav-brand" @click="currentView = 'menu'">
         <span class="nav-logo">🎵</span>
         <h1 class="gradient-text">MusicRoll</h1>
         <span class="version-tag">v1.0</span>
@@ -244,26 +255,49 @@ const installApp = async () => {
 
         <template v-if="user">
           <div class="main-nav-links">
-            <button @click="currentView = 'songs_list'" :class="{ 'text-primary': currentView === 'songs_list' }" class="btn-nav-link">
-              <BookOpen :size="16" /> {{ $t('dashboard.allSongs') }}
+            <button
+              @click="currentView = 'songs_list'"
+              :class="{ 'text-primary': currentView === 'songs_list' }"
+              class="btn-nav-link"
+            >
+              <BookOpen :size="16" /> {{ $t("dashboard.allSongs") }}
             </button>
-            <button @click="currentView = 'setlists'" :class="{ 'text-primary': currentView === 'setlists' }" class="btn-nav-link">
-              <Layers :size="16" /> {{ $t('dashboard.mySetlists') }}
+            <button
+              @click="currentView = 'setlists'"
+              :class="{ 'text-primary': currentView === 'setlists' }"
+              class="btn-nav-link"
+            >
+              <Layers :size="16" /> {{ $t("dashboard.mySetlists") }}
             </button>
-            <button @click="currentView = 'song_create'; songToEdit = null" :class="{ 'text-primary': currentView === 'song_create' }" class="btn-nav-link">
-              <PlusCircle :size="16" /> {{ $t('dashboard.newSong') }}
+            <button
+              @click="
+                currentView = 'song_create';
+                songToEdit = null;
+              "
+              :class="{ 'text-primary': currentView === 'song_create' }"
+              class="btn-nav-link"
+            >
+              <PlusCircle :size="16" /> {{ $t("dashboard.newSong") }}
             </button>
           </div>
-          
+
           <div class="lang-switcher">
-            <button @click="cycleLanguage" class="lang-btn" title="Mudar Idioma">
-              {{ locale === 'pt' ? '🇧🇷' : locale === 'en' ? '🇺🇸' : '🇪🇸' }}
+            <button
+              @click="cycleLanguage"
+              class="lang-btn"
+              title="Mudar Idioma"
+            >
+              {{ locale === "pt" ? "🇧🇷" : locale === "en" ? "🇺🇸" : "🇪🇸" }}
             </button>
           </div>
 
           <div class="user-menu">
             <span class="user-email">{{ user.email }}</span>
-            <button @click="handleLogout" class="btn-icon" :title="$t('app.logout')">
+            <button
+              @click="handleLogout"
+              class="btn-icon"
+              :title="$t('app.logout')"
+            >
               <LogOut :size="18" />
             </button>
           </div>
@@ -281,10 +315,10 @@ const installApp = async () => {
 
         <!-- DASHBOARD (PÁGINA PRINCIPAL APÓS LOGIN) -->
         <div v-else-if="currentView === 'menu'">
-          <Dashboard 
-            :user="user" 
-            @navigate="v => currentView = v" 
-            @edit-song="handleEditSong" 
+          <Dashboard
+            :user="user"
+            @navigate="(v) => (currentView = v)"
+            @edit-song="handleEditSong"
             @play-song="handlePlaySong"
             @play-setlist="handleOpenPresentation"
           />
