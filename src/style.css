@@ -659,22 +659,11 @@ body.immersive-active {
   gap: 0.5rem;
 }
 
-/* Compact Header for Normal Mode */
-.compact-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: 0.5rem !important;
-  margin-bottom: 0.5rem !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  gap: 1rem;
-  flex-wrap: nowrap !important;
-}
-
 .song-meta-small {
   flex: 1;
   display: flex;
   align-items: baseline;
+  justify-content: center;
   gap: 0.5rem;
   overflow: hidden;
   white-space: nowrap;
