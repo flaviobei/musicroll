@@ -266,7 +266,7 @@ const installApp = async () => {
           </div>
           
           <div class="lang-switcher">
-            <button @click="cycleLanguage" class="btn-icon-only active-lang" title="Mudar Idioma">
+            <button @click="cycleLanguage" class="lang-btn" title="Mudar Idioma">
               {{ locale === 'pt' ? '🇧🇷' : locale === 'en' ? '🇺🇸' : '🇪🇸' }}
             </button>
           </div>
