@@ -223,6 +223,7 @@ const defaultLocale = savedLocale || (['pt', 'en', 'es'].includes(navLang) ? nav
 
 const i18n = createI18n({
   legacy: false, // use Composition API
+  globalInjection: true,
   locale: defaultLocale,
   fallbackLocale: 'pt',
   messages

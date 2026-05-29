@@ -69,6 +69,8 @@ onMounted(() => {
   // Check session on mount
   supabase.auth.getSession().then(({ data: { session } }) => {
     user.value = session?.user || null;
+  }).catch(error => {
+    console.warn('Erro ao verificar sessão:', error);
   });
 
   // Escutar mudanças de autenticação
@@ -99,18 +101,6 @@ const handleNotification = (payload) => {
   });
 };
 
-// Check session on mount
-onMounted(async () => {
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  user.value = session?.user || null;
-
-  // Escutar mudanças de autenticação
-  supabase.auth.onAuthStateChange((_event, session) => {
-    user.value = session?.user || null;
-  });
-});
 
 const handleAuthSuccess = (authUser) => {
   user.value = authUser;
