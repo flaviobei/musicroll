@@ -447,6 +447,13 @@ body.immersive-active {
 
 /* Font Adjuster Adjustments for Mobile Controls */
 @media (max-width: 640px) {
+  .player-panel {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0.5rem !important;
+  }
+
   .player-panel .player-controls {
     display: flex;
     flex-wrap: wrap;

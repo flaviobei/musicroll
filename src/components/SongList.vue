@@ -614,6 +614,16 @@ onUnmounted(() => {
   padding: 2.5rem;
 }
 
+@media (max-width: 640px) {
+  .player-panel,
+  .list-panel {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0.5rem;
+  }
+}
+
 .loading-state,
 .empty-state {
   text-align: center;
