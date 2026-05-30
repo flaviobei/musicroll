@@ -25,6 +25,24 @@ const tone = ref('')
 const notes = ref('')
 const loading = ref(false)
 
+const tapTimes = ref([])
+
+const handleTap = () => {
+  const now = Date.now()
+  tapTimes.value = tapTimes.value.filter(t => now - t < 3000)
+  tapTimes.value.push(now)
+  
+  if (tapTimes.value.length >= 2) {
+    const intervals = []
+    for (let i = 1; i < tapTimes.value.length; i++) {
+      intervals.push(tapTimes.value[i] - tapTimes.value[i - 1])
+    }
+    const avgInterval = intervals.reduce((a, b) => a + b, 0) / intervals.length
+    const calculatedBpm = Math.round(60000 / avgInterval)
+    bpm.value = Math.max(40, Math.min(300, calculatedBpm))
+  }
+}
+
 const fillForm = () => {
   if (props.songToEdit) {
     title.value = props.songToEdit.title || ''
@@ -284,6 +302,16 @@ const handleSubmit = async () => {
             <Plus :size="16" />
           </button>
           
+          <button 
+            type="button" 
+            @mousedown.prevent="handleTap" 
+            @touchstart.prevent="handleTap"
+            class="btn btn-primary pulse-glow btn-tap"
+            title="Clique no ritmo para descobrir o BPM"
+          >
+            👆 Tap Tempo
+          </button>
+          
           <div class="bpm-indicator">
             <span v-if="bpm < 80" class="badge-dot dot-slow">🔵 {{ $t('songForm.tempo.slow') }}</span>
             <span v-else-if="bpm <= 120" class="badge-dot dot-medium">🟣 {{ $t('songForm.tempo.medium') }}</span>
@@ -431,6 +459,15 @@ const handleSubmit = async () => {
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-sm);
+}
+
+.btn-tap {
+  height: 42px;
+  padding: 0 1rem;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
 }
 
 .bpm-indicator {

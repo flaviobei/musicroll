@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { supabase } from "../lib/supabase";
-import { Play, Music, Layers, PlusCircle, Clock } from "@lucide/vue";
+import { Play, Music, Layers, PlusCircle, Clock, Info, X } from "@lucide/vue";
 
 const props = defineProps({
   user: Object,
@@ -12,6 +12,7 @@ const emit = defineEmits(["navigate", "play-song", "play-setlist"]);
 const recentSongs = ref([]);
 const recentSetlists = ref([]);
 const loading = ref(true);
+const showUpdatesModal = ref(false);
 
 const fetchRecentData = async () => {
   if (!props.user) return;
@@ -103,15 +104,23 @@ onMounted(() => {
 <template>
   <div class="dashboard-panel glass-panel">
     <div class="dashboard-header mb-4">
-      <h2 class="gradient-text-primary">
-        {{
-          $t("dashboard.welcome", {
-            name: user?.email?.split("@")[0] || "Músico",
-          })
-        }}
-      </h2>
-      <p class="text-muted">{{ $t("dashboard.subtitle") }}</p>
-      <br />
+      <div class="dashboard-header-top">
+        <div>
+          <h2 class="gradient-text-primary" style="margin-bottom: 0.25rem">
+            {{
+              $t("dashboard.welcome", {
+                name: user?.email?.split("@")[0] || "Músico",
+              })
+            }}
+          </h2>
+          <p class="text-muted">{{ $t("dashboard.subtitle") }}</p>
+          <br />
+        </div>
+
+        <button @click="showUpdatesModal = true" class="btn-updates">
+          <Info :size="16" /> Novidades
+        </button>
+      </div>
     </div>
 
     <div class="quick-actions-row mb-4">
@@ -219,6 +228,38 @@ onMounted(() => {
         </div>
       </div>
     </div>
+
+    <!-- Modal Últimas Atualizações -->
+    <div
+      v-if="showUpdatesModal"
+      class="modal-overlay"
+      @click="showUpdatesModal = false"
+    >
+      <div class="modal-content glass-panel" @click.stop>
+        <div class="modal-header">
+          <h3 class="gradient-text-primary">Últimas Atualizações</h3>
+          <button @click="showUpdatesModal = false" class="btn-icon">
+            <X :size="20" />
+          </button>
+        </div>
+        <div class="modal-body">
+          <ul class="updates-list">
+            <li>
+              <strong>Tap Tempo:</strong> Adicionado botão para descobrir BPM
+              facilmente nas cifras.
+            </li>
+            <li>
+              <strong>Download Setlist:</strong> Opção de baixar setlist
+              completo como arquivo de texto para uso offline.
+            </li>
+            <li>
+              <strong>Ordenação de Cifras:</strong> Nova opção de ordenar por
+              Nome, Artista ou Mais Recentes.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -227,8 +268,38 @@ onMounted(() => {
   padding: 2rem;
 }
 
+.dashboard-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.btn-updates {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(236, 72, 153, 0.15);
+  border: 1px solid rgba(236, 72, 153, 0.4);
+  color: #f472b6;
+  padding: 0.4rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-updates:hover {
+  background: rgba(236, 72, 153, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.2);
+}
+
 .dashboard-header p {
-  margin-top: 0.5rem;
+  margin-top: 0;
 }
 
 .quick-actions-row {
@@ -322,5 +393,74 @@ onMounted(() => {
   font-style: italic;
   background: rgba(0, 0, 0, 0.2);
   border-radius: var(--radius-sm);
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-content {
+  background: #0f172a;
+  border-radius: var(--radius-md);
+  width: 100%;
+  max-width: 500px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 1rem;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.updates-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.updates-list li {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.updates-list li::before {
+  content: "✨";
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 0.9rem;
+}
+
+.updates-list li strong {
+  color: var(--text-main);
 }
 </style>

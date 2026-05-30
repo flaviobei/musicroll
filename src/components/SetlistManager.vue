@@ -3,7 +3,7 @@ import { ref, onMounted, computed } from 'vue'
 import { supabase } from '../lib/supabase'
 import { 
   Plus, Trash2, FolderPlus, Music, ChevronUp, ChevronDown, 
-  X, Check, Layers, AlertCircle, PlayCircle, Search, Edit3
+  X, Check, Layers, AlertCircle, PlayCircle, Search, Edit3, Download
 } from '@lucide/vue'
 
 const props = defineProps({
@@ -400,6 +400,37 @@ const startPresentation = () => {
   })
 }
 
+const downloadSetlistText = () => {
+  if (!activeSetlist.value || activeSetlistSongs.value.length === 0) {
+    emit('show-notification', { type: 'error', message: 'Setlist vazia. Adicione músicas primeiro.' })
+    return
+  }
+  
+  let content = `Setlist: ${activeSetlist.value.name}\n`
+  content += `Gerado por MusicRoll\n\n`
+  
+  activeSetlistSongs.value.forEach((song, index) => {
+    content += `=========================================\n`
+    content += `${index + 1}. ${song.title} - ${song.artist}\n`
+    if (song.tone) content += `Tom: ${song.tone}\n`
+    if (song.bpm) content += `BPM: ${song.bpm}\n`
+    content += `=========================================\n\n`
+    content += `${song.content}\n\n\n`
+  })
+  
+  const blob = new Blob([content], { type: 'text/plain;charset=utf-8' })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = `${activeSetlist.value.name.replace(/\\s+/g, '_')}_setlist.txt`
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  URL.revokeObjectURL(url)
+  
+  emit('show-notification', { type: 'success', message: 'Download concluído!' })
+}
+
 const quickStartSetlist = async (setId) => {
   const set = setlists.value.find(s => s.id === setId)
   if (!set) return
@@ -521,13 +552,23 @@ onMounted(() => {
                 </div>
                 <span class="song-count">{{ activeSetlistSongs.length }} música(s)</span>
               </div>
-              <button 
-                @click="startPresentation" 
-                class="btn btn-primary pulse-glow" 
-                :disabled="activeSetlistSongs.length === 0"
-              >
-                ⚡ Iniciar Apresentação
-              </button>
+              <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: flex-end;">
+                <button 
+                  @click="downloadSetlistText" 
+                  class="btn btn-secondary" 
+                  :disabled="activeSetlistSongs.length === 0"
+                  title="Baixar Setlist em Texto"
+                >
+                  <Download :size="16" style="margin-right: 0.25rem;" /> Baixar .txt
+                </button>
+                <button 
+                  @click="startPresentation" 
+                  class="btn btn-primary pulse-glow" 
+                  :disabled="activeSetlistSongs.length === 0"
+                >
+                  ⚡ Iniciar Apresentação
+                </button>
+              </div>
             </div>
 
             <!-- GRAFICO BPM E TONS (Fluxo de Energia) -->

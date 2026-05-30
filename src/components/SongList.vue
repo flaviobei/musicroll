@@ -465,14 +465,24 @@ onUnmounted(() => {
     <div v-else class="glass-panel list-panel">
       <h3 class="gradient-text-primary mb-4">{{ $t("songs.title") }}</h3>
 
-      <div class="search-bar">
-        <Search class="search-icon" :size="16" />
-        <input
-          type="text"
-          v-model="searchQuery"
-          :placeholder="$t('songs.search')"
-          class="search-input"
-        />
+      <div class="filters-row">
+        <div class="search-bar">
+          <Search class="search-icon" :size="16" />
+          <input
+            type="text"
+            v-model="searchQuery"
+            :placeholder="$t('songs.search')"
+            class="search-input"
+          />
+        </div>
+        <div class="sort-wrapper">
+          <Filter class="sort-icon" :size="16" />
+          <select v-model="sortBy" class="sort-select">
+            <option value="artist">Artista</option>
+            <option value="recent">Mais Recentes</option>
+            <option value="title">Nome da Música</option>
+          </select>
+        </div>
       </div>
 
       <div v-if="loading" class="loading-state">
@@ -516,11 +526,6 @@ onUnmounted(() => {
               <span class="badge speed-badge"
                 >🥁 {{ song.bpm || 120 }} BPM
                 <span v-if="Number(song.bpm || 120) > 180">🌶️</span></span
-              >
-              <span
-                v-if="song.user_id && user && song.user_id === user.id"
-                class="badge owner-badge"
-                >Minha</span
               >
             </div>
           </div>
@@ -566,11 +571,17 @@ onUnmounted(() => {
   margin-bottom: 1.5rem;
 }
 
+.filters-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
 .search-bar {
   position: relative;
   display: flex;
   align-items: center;
-  margin-bottom: 0.5rem;
+  flex: 1;
 }
 
 .search-icon {
@@ -602,6 +613,52 @@ onUnmounted(() => {
 
 .search-input::placeholder {
   color: var(--text-muted);
+}
+
+.sort-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.sort-icon {
+  position: absolute;
+  left: 0.85rem;
+  color: var(--text-muted);
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+.sort-select {
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 0.9rem;
+  padding: 0.6rem 2.5rem 0.6rem 2.5rem;
+  transition: all 0.2s ease;
+  appearance: none;
+  cursor: pointer;
+}
+
+.sort-select:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px var(--accent-primary-glow);
+  background: rgba(15, 23, 42, 0.6);
+}
+
+.sort-select option {
+  background: #0f172a;
+  color: #fff;
+}
+
+@media (max-width: 640px) {
+  .filters-row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
 }
 
 .song-list-container {
