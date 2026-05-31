@@ -33,7 +33,7 @@ const messages = {
           Flavio Bei é luthier, baixista e programador. <br />Conheça mais do meu trabalho <br /><br />
           <a href="https://www.instagram.com/flaviobei/" target="_blank" class="link-social link-instagram">Instagram</a>
           /
-          <a href="https://www.youtube.com/@flaviobei?sub_confirmation=1" target="_blank" class="link-social link-youtube">Youtube</a>
+          <a href="https://www.youtube.com/{'@'}flaviobei?sub_confirmation=1" target="_blank" class="link-social link-youtube">Youtube</a>
           /
           <a href="https://github.com/flaviobei" target="_blank" class="link-social link-github">GitHub</a>
         </p>
@@ -184,7 +184,7 @@ const messages = {
           Flavio Bei is a luthier, bassist, and programmer. <br />Check out more of my work <br /><br />
           <a href="https://www.instagram.com/flaviobei/" target="_blank" class="link-social link-instagram">Instagram</a>
           /
-          <a href="https://www.youtube.com/@flaviobei?sub_confirmation=1" target="_blank" class="link-social link-youtube">Youtube</a>
+          <a href="https://www.youtube.com/{'@'}flaviobei?sub_confirmation=1" target="_blank" class="link-social link-youtube">Youtube</a>
           /
           <a href="https://github.com/flaviobei" target="_blank" class="link-social link-github">GitHub</a>
         </p>
@@ -335,7 +335,7 @@ const messages = {
           Flavio Bei es luthier, bajista y programador. <br />Conoce más de mi trabajo <br /><br />
           <a href="https://www.instagram.com/flaviobei/" target="_blank" class="link-social link-instagram">Instagram</a>
           /
-          <a href="https://www.youtube.com/@flaviobei?sub_confirmation=1" target="_blank" class="link-social link-youtube">Youtube</a>
+          <a href="https://www.youtube.com/{'@'}flaviobei?sub_confirmation=1" target="_blank" class="link-social link-youtube">Youtube</a>
           /
           <a href="https://github.com/flaviobei" target="_blank" class="link-social link-github">GitHub</a>
         </p>
