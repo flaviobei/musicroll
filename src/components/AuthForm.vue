@@ -30,13 +30,8 @@ const handleAuth = async () => {
       })
       if (error) throw error
       
-      // Se a confirmação de e-mail estiver ativada no Supabase, o usuário precisa confirmar
-      if (data?.user && data?.session === null) {
-        successMessage.value = 'Cadastro realizado! Verifique seu e-mail para confirmação.'
-      } else {
-        successMessage.value = 'Cadastro realizado com sucesso!'
-        emit('auth-success', data.session?.user || data.user)
-      }
+      successMessage.value = 'Cadastro realizado com sucesso!'
+      emit('auth-success', data.session?.user || data.user)
     } else {
       const { data, error } = await supabase.auth.signInWithPassword({
         email: email.value,

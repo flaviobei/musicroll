@@ -6,6 +6,7 @@ import SongForm from "./components/SongForm.vue";
 import SongList from "./components/SongList.vue";
 import SetlistManager from "./components/SetlistManager.vue";
 import Dashboard from "./components/Dashboard.vue";
+import AboutModal from "./components/AboutModal.vue";
 import {
   LogOut,
   User,
@@ -37,6 +38,7 @@ const cycleLanguage = () => {
 };
 
 const user = ref(null);
+const showAboutModal = ref(false);
 const currentView = ref("menu"); // views: menu, songs_list, song_create, setlists
 const songToEdit = ref(null);
 const songListRef = ref(null);
@@ -48,13 +50,13 @@ const isIOS = ref(false);
 
 // Global Error Catcher for Debugging
 const fatalError = ref(null);
-import { onErrorCaptured } from 'vue';
+import { onErrorCaptured } from "vue";
 onErrorCaptured((err, instance, info) => {
   console.error("Vue Error Captured:", err, info);
   fatalError.value = {
     message: err.message || String(err),
     info,
-    stack: err.stack
+    stack: err.stack,
   };
   return false; // stop propagation
 });
@@ -271,7 +273,8 @@ const installApp = async () => {
               class="btn-nav-link"
               :title="$t('dashboard.allSongs')"
             >
-              <BookOpen :size="16" /> <span class="nav-text">{{ $t("dashboard.allSongs") }}</span>
+              <BookOpen :size="16" />
+              <span class="nav-text">{{ $t("dashboard.allSongs") }}</span>
             </button>
             <button
               @click="currentView = 'setlists'"
@@ -279,7 +282,8 @@ const installApp = async () => {
               class="btn-nav-link"
               :title="$t('dashboard.mySetlists')"
             >
-              <Layers :size="16" /> <span class="nav-text">{{ $t("dashboard.mySetlists") }}</span>
+              <Layers :size="16" />
+              <span class="nav-text">{{ $t("dashboard.mySetlists") }}</span>
             </button>
             <button
               @click="
@@ -290,7 +294,8 @@ const installApp = async () => {
               class="btn-nav-link"
               :title="$t('dashboard.newSong')"
             >
-              <PlusCircle :size="16" /> <span class="nav-text">{{ $t("dashboard.newSong") }}</span>
+              <PlusCircle :size="16" />
+              <span class="nav-text">{{ $t("dashboard.newSong") }}</span>
             </button>
           </div>
 
@@ -302,7 +307,13 @@ const installApp = async () => {
             >
               <span
                 class="fi"
-                :class="locale === 'pt' ? 'fi-br' : locale === 'en' ? 'fi-us' : 'fi-es'"
+                :class="
+                  locale === 'pt'
+                    ? 'fi-br'
+                    : locale === 'en'
+                      ? 'fi-us'
+                      : 'fi-es'
+                "
               ></span>
             </button>
           </div>
@@ -325,11 +336,31 @@ const installApp = async () => {
 
     <!-- Main Content Area -->
     <main class="main-content">
-      <div v-if="fatalError" class="alert alert-danger-custom m-4" style="text-align:left; background: #331111; color: #ffaaaa; border: 1px solid red; padding: 20px;">
-        <h3 style="color:white; margin-bottom:10px;">🚨 Erro Crítico (Debug)</h3>
+      <div
+        v-if="fatalError"
+        class="alert alert-danger-custom m-4"
+        style="
+          text-align: left;
+          background: #331111;
+          color: #ffaaaa;
+          border: 1px solid red;
+          padding: 20px;
+        "
+      >
+        <h3 style="color: white; margin-bottom: 10px">
+          🚨 Erro Crítico (Debug)
+        </h3>
         <p><strong>Mensagem:</strong> {{ fatalError.message }}</p>
         <p><strong>Contexto:</strong> {{ fatalError.info }}</p>
-        <pre style="margin-top:10px; font-size:11px; white-space:pre-wrap; overflow-x:auto;">{{ fatalError.stack }}</pre>
+        <pre
+          style="
+            margin-top: 10px;
+            font-size: 11px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+          "
+          >{{ fatalError.stack }}</pre
+        >
       </div>
 
       <!-- MODO DE AUTENTICAÇÃO -->
@@ -422,8 +453,14 @@ const installApp = async () => {
 
     <!-- Footer -->
     <footer class="app-footer">
-      <p>© 2026 MusicRoll. Desenvolvido por Flavio Bei.</p>
+      <p>© 2026 MusicRoll. Desenvolvido por FLB.</p>
+      <button @click="showAboutModal = true" class="btn-link-footer">
+        Sobre o App
+      </button>
     </footer>
+
+    <!-- About Modal -->
+    <AboutModal v-if="showAboutModal" @close="showAboutModal = false" />
   </div>
 </template>
 
@@ -644,5 +681,21 @@ const installApp = async () => {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+.btn-link-footer {
+  background: none;
+  border: none;
+  color: var(--text-main);
+  font-size: 0.85rem;
+  font-family: inherit;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.btn-link-footer:hover {
+  color: var(--text-muted);
 }
 </style>

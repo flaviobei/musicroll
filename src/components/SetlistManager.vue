@@ -3,7 +3,7 @@ import { ref, onMounted, computed } from 'vue'
 import { supabase } from '../lib/supabase'
 import { 
   Plus, Trash2, FolderPlus, Music, ChevronUp, ChevronDown, 
-  X, Check, Layers, AlertCircle, PlayCircle, Search, Edit3, Download
+  X, Check, Layers, AlertCircle, PlayCircle, Search, Edit3, Download, GripVertical
 } from '@lucide/vue'
 
 const props = defineProps({
@@ -367,15 +367,52 @@ const moveSong = async (index, direction) => {
   })
 
   activeSetlistSongs.value = list
+  await saveReorderedSetlist()
+}
 
-  // Save changes
+// DRAG AND DROP LOGIC
+const draggedIndex = ref(null)
+
+const onDragStart = (index, event) => {
+  draggedIndex.value = index
+  event.dataTransfer.effectAllowed = 'move'
+  event.target.classList.add('dragging')
+}
+
+const onDragEnd = async (event) => {
+  draggedIndex.value = null
+  event.target.classList.remove('dragging')
+  
+  activeSetlistSongs.value.forEach((item, idx) => {
+    item.order_index = idx
+  })
+  await saveReorderedSetlist()
+}
+
+const onDragEnter = (index) => {
+  if (draggedIndex.value === null || draggedIndex.value === index) return
+  
+  const list = [...activeSetlistSongs.value]
+  const draggedSong = list[draggedIndex.value]
+  
+  list.splice(draggedIndex.value, 1)
+  list.splice(index, 0, draggedSong)
+  
+  activeSetlistSongs.value = list
+  draggedIndex.value = index
+}
+
+const onDrop = () => {
+  // Logic moved to dragenter for real-time swapping and dragend for saving
+}
+
+const saveReorderedSetlist = async () => {
+  const list = activeSetlistSongs.value
   try {
     if (isDemo) {
       const localKey = `musicroll_setlist_songs_${activeSetlist.value.id}`
       localStorage.setItem(localKey, JSON.stringify(list))
     } else {
-      // In Supabase, update both relations
-      // A quick transaction or parallel updates
       const updates = list.map(item => {
         return supabase
           .from('setlist_songs')
@@ -577,12 +614,19 @@ onMounted(() => {
                 Fluxo de Energia (BPM)
                 <span class="estimated-time">| Duração Estimada: {{ totalDuration }} min</span>
               </div>
-              <div class="bpm-chart-container">
+              <TransitionGroup name="list-elastic" tag="div" class="bpm-chart-container">
                 <div 
-                  v-for="song in activeSetlistSongs" 
+                  v-for="(song, index) in activeSetlistSongs" 
                   :key="'chart-'+song.id"
                   class="bpm-bar-wrapper"
                   :title="song.title + ' - ' + (song.bpm || 120) + ' BPM'"
+                  draggable="true"
+                  @dragstart="onDragStart(index, $event)"
+                  @dragover.prevent
+                  @dragenter.prevent="onDragEnter(index)"
+                  @drop="onDrop"
+                  @dragend="onDragEnd($event)"
+                  style="cursor: grab;"
                 >
                   <div 
                     class="bpm-bar"
@@ -595,12 +639,12 @@ onMounted(() => {
                     :style="{ height: Math.min(100, Math.max(10, (Number(song.bpm || 120) / 200) * 100)) + '%' }"
                   ></div>
                 </div>
-              </div>
-              <div class="bpm-tone-sequence">
+              </TransitionGroup>
+              <TransitionGroup name="list-elastic" tag="div" class="bpm-tone-sequence">
                 <div v-for="song in activeSetlistSongs" :key="'tone-'+song.id" class="tone-badge-small">
                   {{ song.tone || '-' }}
                 </div>
-              </div>
+              </TransitionGroup>
             </div>
 
             <div class="details-grid">
@@ -616,7 +660,7 @@ onMounted(() => {
                     <p>{{ $t('setlists.emptySongs') }}</p>
                   </div>
                 </div>
-                <div v-else class="setlist-songs-list">
+                <TransitionGroup name="list-elastic" tag="div" class="setlist-songs-list">
                   <div 
                     v-for="(song, index) in activeSetlistSongs" 
                     :key="song.id" 
@@ -627,7 +671,17 @@ onMounted(() => {
                       'bpm-laranja': Number(song.bpm || 120) >= 90 && Number(song.bpm || 120) <= 120,
                       'bpm-vermelho': Number(song.bpm || 120) > 120
                     }"
+                    draggable="true"
+                    @dragstart="onDragStart(index, $event)"
+                    @dragover.prevent
+                    @dragenter.prevent="onDragEnter(index)"
+                    @drop="onDrop"
+                    @dragend="onDragEnd($event)"
+                    style="cursor: grab;"
                   >
+                    <div class="drag-handle" title="Arraste para reordenar">
+                      <GripVertical :size="16" />
+                    </div>
                     <div class="song-order-num">{{ index + 1 }}</div>
                     <div class="song-info">
                       <h6>{{ song.title }}</h6>
@@ -665,7 +719,7 @@ onMounted(() => {
                       </button>
                     </div>
                   </div>
-                </div>
+                </TransitionGroup>
               </div>
 
               <!-- MÚSICAS DISPONÍVEIS PARA ADICIONAR -->
@@ -838,6 +892,34 @@ onMounted(() => {
   transition: all var(--transition-fast);
 }
 
+.setlist-song-item.dragging {
+  opacity: 0.6;
+  transform: scale(0.98);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+  border: 1px dashed rgba(139, 92, 246, 0.8);
+  background: rgba(139, 92, 246, 0.1);
+  z-index: 10;
+}
+
+.drag-handle {
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  opacity: 0.3;
+  transition: opacity var(--transition-fast), color var(--transition-fast);
+}
+
+.setlist-song-item:hover .drag-handle {
+  opacity: 1;
+  color: var(--text-main);
+}
+
+.setlist-song-item:active .drag-handle {
+  cursor: grabbing;
+}
+
 .setlist-item:hover {
   background: rgba(255, 255, 255, 0.07);
   border-color: rgba(255, 255, 255, 0.1);
@@ -951,10 +1033,18 @@ onMounted(() => {
   background: rgba(255, 255, 255, 0.03);
   border-radius: 4px 4px 0 0;
   position: relative;
+  transition: all var(--transition-fast);
 }
 
 .bpm-bar-wrapper:hover {
   background: rgba(255, 255, 255, 0.1);
+}
+
+.bpm-bar-wrapper.dragging {
+  opacity: 0.6;
+  transform: scale(0.9);
+  background: rgba(139, 92, 246, 0.2);
+  z-index: 10;
 }
 
 .bpm-bar {
@@ -1063,6 +1153,28 @@ onMounted(() => {
   overflow-y: auto;
   flex: 1;
   padding-right: 0.25rem;
+  position: relative;
+}
+
+/* Efeito Elástico de Reordenação */
+.list-elastic-move {
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.list-elastic-enter-active,
+.list-elastic-leave-active {
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.list-elastic-enter-from,
+.list-elastic-leave-to {
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+}
+
+.list-elastic-leave-active {
+  position: absolute;
+  width: calc(100% - 0.25rem); /* Prevents layout collapse when leaving */
 }
 
 .setlist-song-item, .available-song-item {
