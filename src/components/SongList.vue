@@ -23,7 +23,10 @@ import {
   SkipForward,
   Search,
   Filter,
+  Plus,
+  Minus
 } from "@lucide/vue";
+import { parseAndTranspose } from "../lib/chordParser";
 
 const props = defineProps({
   user: {
@@ -70,6 +73,12 @@ let lastTime = 0;
 // Immersive & Font Size Mobile Controls
 const isImmersive = ref(false);
 const fontSize = ref(1.0);
+const transposeLevel = ref(0);
+
+const parsedSongContent = computed(() => {
+  return parseAndTranspose(activeSong.value?.content || '', transposeLevel.value);
+});
+
 const isDemo =
   !import.meta.env.VITE_SUPABASE_URL ||
   import.meta.env.VITE_SUPABASE_URL.includes("seu-projeto-supabase");
@@ -172,6 +181,7 @@ const openPlayer = (song, playlist = []) => {
   activeSpeed.value = 1.0; // Multiplicador dinâmico de refinamento (1.0x)
   isScrolling.value = false;
   playlistSongs.value = playlist;
+  transposeLevel.value = 0;
 
   // Ativa automaticamente o Modo Imersivo para performance
   isImmersive.value = true;
@@ -356,6 +366,26 @@ onUnmounted(() => {
           </button>
         </div>
 
+        <div class="control-group transpose-group">
+          <button
+            @click="transposeLevel--"
+            class="btn btn-secondary btn-icon-only"
+            title="- Tom"
+          >
+            <Minus :size="16" />
+          </button>
+          <div class="transpose-badge" title="Tom">
+            {{ transposeLevel > 0 ? '+' : '' }}{{ transposeLevel }}
+          </div>
+          <button
+            @click="transposeLevel++"
+            class="btn btn-secondary btn-icon-only"
+            title="+ Tom"
+          >
+            <Plus :size="16" />
+          </button>
+        </div>
+
         <div class="control-group">
           <button
             @click="fontSize = Math.max(0.8, fontSize - 0.1)"
@@ -383,9 +413,7 @@ onUnmounted(() => {
 
       <!-- PRE CONTAINER -->
       <div class="pre-container" ref="readerPanel">
-        <pre class="chord-pre" :style="{ fontSize: `${fontSize}rem` }">{{
-          activeSong.content
-        }}</pre>
+        <pre class="chord-pre" :style="{ fontSize: `${fontSize}rem` }" v-html="parsedSongContent"></pre>
 
         <!-- Próxima Música da Setlist (Se houver playlist ativa) -->
         <div v-if="getNextSong() && !isSetlistMode" class="next-song-footer">
@@ -844,18 +872,54 @@ onUnmounted(() => {
 }
 
 .pre-container {
+  max-height: 55vh;
   overflow-y: auto;
-  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-sm);
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  scroll-behavior: smooth;
+  /* IMPORTANTE para o Auto-Scroll Mobile: esconde o scrollbar mas permite rolagem */
+  -ms-overflow-style: none; /* IE e Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.pre-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari e Opera */
 }
 
 .chord-pre {
   margin: 0;
   border: none;
+  padding: 0.5rem 0;
+  white-space: pre-wrap;
+  font-family: "Courier New", Courier, monospace;
+  line-height: 1.5;
   font-size: 1.15rem;
   font-weight: 600;
   color: #ffffff;
-  padding: 0.5rem 0;
-  white-space: pre-wrap;
+  transition: font-size 0.2s ease-out;
+}
+
+:deep(.chord-line) {
+  color: #c084fc;
+}
+
+:deep(.chord) {
+  background: rgba(192, 132, 252, 0.1);
+  padding: 0 0.15rem;
+  border-radius: 4px;
+}
+
+.transpose-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #c084fc;
 }
 
 .player-footer {

@@ -1,7 +1,8 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 import { supabase } from '../lib/supabase'
-import { PlusCircle, Music, User, Sliders, FileText, Plus, Minus } from '@lucide/vue'
+import { PlusCircle, Music, User, Sliders, FileText, Plus, Minus, Save } from '@lucide/vue'
+import { transposePlainText } from '../lib/chordParser'
 
 const props = defineProps({
   user: {
@@ -97,6 +98,11 @@ E eu quero encontrar o meu amor
 Em7                   A7
 Sem nenhum respingo de chuva`
   bpm.value = 112
+}
+
+const applyTranspose = (offset) => {
+  if (!content.value) return
+  content.value = transposePlainText(content.value, offset)
 }
 
 const handleSubmit = async () => {
@@ -322,10 +328,21 @@ const handleSubmit = async () => {
 
       <!-- Cifra Content Textarea -->
       <div class="form-group">
-        <label class="form-label" for="song-content">
-          <FileText :size="14" style="vertical-align: middle; margin-right: 4px;" />
-          {{ $t('songForm.content') }}
-        </label>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <label class="form-label" for="song-content" style="margin-bottom: 0;">
+            <FileText :size="14" style="vertical-align: middle; margin-right: 4px;" />
+            {{ $t('songForm.content') }}
+          </label>
+          <div style="display: flex; align-items: center; gap: 0.4rem; background: rgba(15, 23, 42, 0.3); padding: 0.2rem; border-radius: var(--radius-sm); border: 1px solid rgba(255, 255, 255, 0.05);">
+            <button type="button" @click="applyTranspose(-1)" class="btn btn-secondary btn-icon-only" style="padding: 0.2rem;" title="- Tom">
+              <Minus :size="14" />
+            </button>
+            <span style="font-size: 0.75rem; font-weight: 600; color: #c084fc;">Transpor (Definitivo)</span>
+            <button type="button" @click="applyTranspose(1)" class="btn btn-secondary btn-icon-only" style="padding: 0.2rem;" title="+ Tom">
+              <Plus :size="14" />
+            </button>
+          </div>
+        </div>
         <textarea 
           id="song-content" 
           v-model="content" 

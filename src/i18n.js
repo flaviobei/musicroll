@@ -24,7 +24,7 @@ const messages = {
         </p>
         <p>
           <b>O app é de graça? 💸</b><br />
-          Sim! Totalmente free e zero propagandas chatas pulando na sua tela. E a nossa ideia é manter ele assim mesmo, feito de músico pra músico!
+          Atualmente o app é free e pretendo manter assim, alguns recursos podem vir a ser pagos via assinatura, mas a ideia é que seja sempre acessível na forma gratuíta!
         </p>
         <p>
           <b>Sobre o criador</b><br />
@@ -142,7 +142,7 @@ const messages = {
         </p>
         <p>
           <b>Is the app free? 💸</b><br />
-          Yes! Totally free and zero annoying ads jumping on your screen. And our plan is to keep it that way, made by musicians for musicians!
+          Currently the app is free and I intend to keep it that way, some features might become paid via subscription, but the idea is for it to always be accessible for free!
         </p>
         <p>
           <b>About the creator</b><br />
@@ -260,7 +260,7 @@ const messages = {
         </p>
         <p>
           <b>¿La app es gratis? 💸</b><br />
-          ¡Sí! Totalmente gratis y cero anuncios molestos saltando en tu pantalla. ¡Y nuestra idea es mantenerla así, hecha de músico para músico!
+          Actualmente la app es gratis y pretendo mantenerla así, algunas funciones podrían volverse de pago mediante suscripción, ¡pero la idea es que siempre sea accesible de forma gratuita!
         </p>
         <p>
           <b>Sobre el creador</b><br />
