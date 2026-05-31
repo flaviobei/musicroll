@@ -7,6 +7,7 @@ import SongList from "./components/SongList.vue";
 import SetlistManager from "./components/SetlistManager.vue";
 import Dashboard from "./components/Dashboard.vue";
 import AboutModal from "./components/AboutModal.vue";
+import EasterEggModal from "./components/EasterEggModal.vue";
 import {
   LogOut,
   User,
@@ -39,6 +40,7 @@ const cycleLanguage = () => {
 
 const user = ref(null);
 const showAboutModal = ref(false);
+const showNerdModal = ref(false);
 const currentView = ref("menu"); // views: menu, songs_list, song_create, setlists
 const songToEdit = ref(null);
 const songListRef = ref(null);
@@ -249,9 +251,8 @@ const installApp = async () => {
     <!-- Navbar -->
     <header class="navbar glass-panel">
       <div class="nav-brand" @click="currentView = 'menu'">
-        <span class="nav-logo">🎵</span>
         <h1 class="gradient-text">MusicRoll</h1>
-        <span class="version-tag">v1.0</span>
+        <span class="version-tag" @click.stop="showNerdModal = true" style="cursor: pointer;" title="O que é isso?">v1.0 beta</span>
       </div>
 
       <nav class="nav-actions">
@@ -461,6 +462,12 @@ const installApp = async () => {
 
     <!-- About Modal -->
     <AboutModal v-if="showAboutModal" @close="showAboutModal = false" />
+
+    <!-- Easter Egg Modal -->
+    <EasterEggModal
+      :show="showNerdModal"
+      @close="showNerdModal = false"
+    />
   </div>
 </template>
 

@@ -69,6 +69,7 @@ const activeSpeed = ref(1.0);
 const readerPanel = ref(null);
 let animationId = null;
 let lastTime = 0;
+let exactScrollTop = 0;
 
 // Immersive & Font Size Mobile Controls
 const isImmersive = ref(false);
@@ -247,12 +248,18 @@ const scrollStep = (timestamp) => {
   const elapsed = timestamp - lastTime;
 
   // Cálculo de velocidade proporcional ao BPM:
-  // Base: 120 BPM com multiplicador 1.0x consome ~0.35 pixels por frame
+  // Base: 120 BPM com multiplicador 1.0x consome ~0.018 pixels por frame (metade da velocidade anterior)
   const songBpm = Number(activeSong.value.bpm || 120);
   const pixelsToScroll =
-    (songBpm / 120) * activeSpeed.value * (elapsed * 0.035);
+    (songBpm / 120) * activeSpeed.value * (elapsed * 0.018);
 
-  readerPanel.value.scrollTop += pixelsToScroll;
+  // Sincroniza o acumulador caso o usuário tenha rolado a tela manualmente com o dedo/mouse
+  if (Math.abs(readerPanel.value.scrollTop - exactScrollTop) > 2) {
+    exactScrollTop = readerPanel.value.scrollTop;
+  }
+
+  exactScrollTop += pixelsToScroll;
+  readerPanel.value.scrollTop = exactScrollTop;
 
   // Stop if we reach the bottom of the container
   const maxScroll =
@@ -273,6 +280,7 @@ const startScroll = () => {
   if (isScrolling.value) return;
   isScrolling.value = true;
   lastTime = 0;
+  exactScrollTop = readerPanel.value ? readerPanel.value.scrollTop : 0;
   animationId = requestAnimationFrame(scrollStep);
 };
 
@@ -296,13 +304,14 @@ const resetScroll = () => {
   stopScroll();
   if (readerPanel.value) {
     readerPanel.value.scrollTop = 0;
+    exactScrollTop = 0;
   }
 };
 
 const adjustSpeed = (amount) => {
   activeSpeed.value = Math.max(
     0.1,
-    Math.min(5.0, Number((activeSpeed.value + amount).toFixed(1))),
+    Math.min(3.0, Number((activeSpeed.value + amount).toFixed(1))),
   );
 };
 
@@ -343,7 +352,7 @@ onUnmounted(() => {
       <div class="player-controls mini-controls">
         <div class="control-group">
           <button
-            @click="adjustSpeed(-0.5)"
+            @click="adjustSpeed(-0.1)"
             class="btn btn-secondary btn-icon-only"
             title="Diminuir Velocidade"
           >
@@ -358,7 +367,7 @@ onUnmounted(() => {
             <Play v-else :size="20" />
           </button>
           <button
-            @click="adjustSpeed(0.5)"
+            @click="adjustSpeed(0.1)"
             class="btn btn-secondary btn-icon-only"
             title="Aumentar Velocidade"
           >

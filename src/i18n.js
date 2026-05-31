@@ -32,6 +32,8 @@ const messages = {
           <a href="https://www.instagram.com/flaviobei/" target="_blank" class="link-social link-instagram">Instagram</a>
           /
           <a href="https://www.youtube.com/@flaviobei?sub_confirmation=1" target="_blank" class="link-social link-youtube">Youtube</a>
+          /
+          <a href="https://github.com/flaviobei" target="_blank" class="link-social link-github">GitHub</a>
         </p>
       `,
     },
@@ -39,11 +41,26 @@ const messages = {
       title: "Últimas Atualizações",
       content: `
         <ul class="updates-list">
-          <li><strong>Clicar e arrastar:</strong> Agora você pode clicar e arrastar as cifras para reordenar a ordem so seu setlist. Inclusive no gráfico de BPM</li>
-          <li><strong>Tap Tempo:</strong> Adicionado botão para descobrir BPM facilmente nas cifras.</li>
-          <li><strong>Download Setlist:</strong> Opção de baixar setlist completo como arquivo de texto para uso offline.</li>
-          <li><strong>Ordenação de Cifras:</strong> Nova opção de ordenar por Nome, Artista ou Mais Recentes.</li>
+          <li><strong>Drag and drop:</strong> Agora você pode clicar e arrastar as cifras para reordenar seu setlist. Inclusive no gráfico de BPM.</li>
+          <li><strong>Tap Tempo:</strong> Adicionado botão pra descobrir o BPM facilmente nas cifras.</li>
+          <li><strong>Baixar Setlist:</strong> Opção de baixar o setlist completo num arquivo de texto pro uso offline.</li>
         </ul>
+      `,
+    },
+    nerd: {
+      title: "Easter Egg Encontrado!",
+      content: `
+        <div style="text-align: center; margin-bottom: 1.5rem;">
+          <img src="https://campuscode-site.s3.sa-east-1.amazonaws.com/newsletter/187_evolu%C3%A7%C3%A3o.gif" style="max-width: 100%; border-radius: 8px;" alt="Nerd typing fast">
+        </div>
+        <p><b>O que você veio buscar aqui, seu nerd? 🤓</b></p>
+        <p>Acha que só porque clicou na versão do app ia achar algum segredo super confidencial?</p>
+        <p>Bom... já que você está aqui, saiba que o MusicRoll é um projeto open-source construído inteiramente com <strong>Vue 3</strong>, <strong>Vite</strong> e <strong>Supabase</strong> (pro backend).</p>
+        <p>A estilização foi feita no braço usando CSS Vanilla moderno (variáveis e Glassmorphism) e tudo roda direto no navegador, inclusive podendo ser instalado como um PWA.</p>
+        <p style="text-align: center; margin-top: 1.5rem;">
+          Quer ver o código fonte, dar pitaco ou fazer um fork?<br><br>
+          <a href="https://github.com/flaviobei/musicroll" target="_blank" class="btn btn-primary" style="display: inline-block; text-decoration: none;">Acessar Repositório no GitHub</a>
+        </p>
       `,
     },
     auth: {
@@ -150,6 +167,8 @@ const messages = {
           <a href="https://www.instagram.com/flaviobei/" target="_blank" class="link-social link-instagram">Instagram</a>
           /
           <a href="https://www.youtube.com/@flaviobei?sub_confirmation=1" target="_blank" class="link-social link-youtube">Youtube</a>
+          /
+          <a href="https://github.com/flaviobei" target="_blank" class="link-social link-github">GitHub</a>
         </p>
       `,
     },
@@ -160,8 +179,23 @@ const messages = {
           <li><strong>Drag and drop:</strong> Now you can click and drag chords to reorder your setlist. Including in the BPM graph.</li>
           <li><strong>Tap Tempo:</strong> Added button to easily find BPM in chords.</li>
           <li><strong>Download Setlist:</strong> Option to download the full setlist as a text file for offline use.</li>
-          <li><strong>Chord Sorting:</strong> New option to sort by Name, Artist, or Most Recent.</li>
         </ul>
+      `,
+    },
+    nerd: {
+      title: "Easter Egg Found!",
+      content: `
+        <div style="text-align: center; margin-bottom: 1.5rem;">
+          <img src="https://campuscode-site.s3.sa-east-1.amazonaws.com/newsletter/187_evolu%C3%A7%C3%A3o.gif" style="max-width: 100%; border-radius: 8px;" alt="Nerd typing fast">
+        </div>
+        <p><b>What did you come looking for here, you nerd? 🤓</b></p>
+        <p>Did you think just because you clicked on the app version you would find some top secret stuff?</p>
+        <p>Well... since you are here, you should know that MusicRoll is an open-source project built entirely with <strong>Vue 3</strong>, <strong>Vite</strong> and <strong>Supabase</strong> (for backend).</p>
+        <p>The styling was done from scratch using modern Vanilla CSS (variables and Glassmorphism) and everything runs straight in the browser, and can even be installed as a PWA.</p>
+        <p style="text-align: center; margin-top: 1.5rem;">
+          Want to see the source code, give some feedback or fork it?<br><br>
+          <a href="https://github.com/flaviobei/musicroll" target="_blank" class="btn btn-primary" style="display: inline-block; text-decoration: none;">Go to GitHub Repository</a>
+        </p>
       `,
     },
     auth: {
@@ -268,6 +302,8 @@ const messages = {
           <a href="https://www.instagram.com/flaviobei/" target="_blank" class="link-social link-instagram">Instagram</a>
           /
           <a href="https://www.youtube.com/@flaviobei?sub_confirmation=1" target="_blank" class="link-social link-youtube">Youtube</a>
+          /
+          <a href="https://github.com/flaviobei" target="_blank" class="link-social link-github">GitHub</a>
         </p>
       `,
     },
@@ -275,11 +311,26 @@ const messages = {
       title: "Últimas Actualizaciones",
       content: `
         <ul class="updates-list">
-          <li><strong>Arrastrar y soltar:</strong> Ahora puedes hacer clic y arrastrar los acordes para reordenar tu setlist. Incluso en el gráfico de BPM.</li>
-          <li><strong>Tap Tempo:</strong> Se agregó un botón para descubrir fácilmente el BPM en los acordes.</li>
-          <li><strong>Descargar Setlist:</strong> Opción de descargar el setlist completo como archivo de texto para uso sin conexión.</li>
-          <li><strong>Orden de Acordes:</strong> Nueva opción para ordenar por Nombre, Artista o Más Recientes.</li>
+          <li><strong>Drag and drop:</strong> Ahora puedes hacer clic y arrastrar para reordenar tu setlist. Incluso en el gráfico de BPM.</li>
+          <li><strong>Tap Tempo:</strong> Botón añadido para encontrar fácilmente el BPM.</li>
+          <li><strong>Descargar Setlist:</strong> Opción para descargar el setlist completo como archivo de texto para uso offline.</li>
         </ul>
+      `,
+    },
+    nerd: {
+      title: "¡Easter Egg Encontrado!",
+      content: `
+        <div style="text-align: center; margin-bottom: 1.5rem;">
+          <img src="https://campuscode-site.s3.sa-east-1.amazonaws.com/newsletter/187_evolu%C3%A7%C3%A3o.gif" style="max-width: 100%; border-radius: 8px;" alt="Nerd typing fast">
+        </div>
+        <p><b>¿Qué viniste a buscar aquí, nerd? 🤓</b></p>
+        <p>¿Pensaste que solo por hacer clic en la versión de la app encontrarías algún secreto súper confidencial?</p>
+        <p>Bueno... ya que estás aquí, ten en cuenta que MusicRoll es un proyecto open-source construido completamente con <strong>Vue 3</strong>, <strong>Vite</strong> y <strong>Supabase</strong> (para el backend).</p>
+        <p>El estilo se hizo a mano utilizando Vanilla CSS moderno (variables y Glassmorphism) y todo se ejecuta directamente en el navegador, e incluso se puede instalar como una PWA.</p>
+        <p style="text-align: center; margin-top: 1.5rem;">
+          ¿Quieres ver el código fuente, opinar o hacer un fork?<br><br>
+          <a href="https://github.com/flaviobei/musicroll" target="_blank" class="btn btn-primary" style="display: inline-block; text-decoration: none;">Acceder al Repositorio en GitHub</a>
+        </p>
       `,
     },
     auth: {
