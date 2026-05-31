@@ -5,6 +5,7 @@ import {
   Plus, Trash2, FolderPlus, Music, ChevronUp, ChevronDown, 
   X, Check, Layers, AlertCircle, PlayCircle, Search, Edit3, Download, GripVertical
 } from '@lucide/vue'
+import { useDemo } from '../composables/useDemo'
 
 const props = defineProps({
   user: {
@@ -43,7 +44,7 @@ const totalDuration = computed(() => {
   return activeSetlistSongs.value.reduce((acc, song) => acc + Number(song.duration || 4), 0)
 })
 
-const isDemo = !import.meta.env.VITE_SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL.includes('seu-projeto-supabase')
+const { isDemo } = useDemo()
 
 // Fetch all setlists
 const fetchSetlists = async () => {

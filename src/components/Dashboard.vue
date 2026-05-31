@@ -3,6 +3,9 @@ import { ref, onMounted } from "vue";
 import { supabase } from "../lib/supabase";
 import { Play, Music, Layers, PlusCircle, Clock, Info } from "@lucide/vue";
 import UpdatesModal from "./UpdatesModal.vue";
+import { useDemo } from "../composables/useDemo";
+
+const { isDemo } = useDemo();
 
 const props = defineProps({
   user: Object,
@@ -21,9 +24,6 @@ const fetchRecentData = async () => {
 
   try {
     // Buscar últimas 4 músicas (simulado com mock se demo, ou real via Supabase)
-    const isDemo =
-      !import.meta.env.VITE_SUPABASE_URL ||
-      import.meta.env.VITE_SUPABASE_URL.includes("seu-projeto-supabase");
 
     if (!isDemo) {
       const { data: songsData } = await supabase
@@ -63,9 +63,6 @@ const fetchRecentData = async () => {
 };
 
 const playSetlist = async (setlist) => {
-  const isDemo =
-    !import.meta.env.VITE_SUPABASE_URL ||
-    import.meta.env.VITE_SUPABASE_URL.includes("seu-projeto-supabase");
 
   if (isDemo) {
     const local = localStorage.getItem(`musicroll_setlist_songs_${setlist.id}`);

@@ -15,14 +15,15 @@ CREATE TABLE IF NOT EXISTS public.songs (
     bpm INTEGER NOT NULL DEFAULT 120 CHECK (bpm > 0),
     duration INTEGER NOT NULL DEFAULT 4 CHECK (duration > 0),
     default_scroll_speed NUMERIC NOT NULL DEFAULT 1.0 CHECK (default_scroll_speed > 0),
+    is_public BOOLEAN NOT NULL DEFAULT false,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
 ALTER TABLE public.songs ENABLE ROW LEVEL SECURITY;
 
--- RLS: songs (isolado por usuário)
-CREATE POLICY "Usuários podem ver apenas suas próprias músicas"
-ON public.songs FOR SELECT USING (auth.uid() = user_id);
+-- RLS: songs (isolado por usuário e leitura pública)
+CREATE POLICY "Músicas públicas são visíveis para todos"
+ON public.songs FOR SELECT USING (is_public = true OR auth.uid() = user_id);
 
 CREATE POLICY "Usuários autenticados podem inserir músicas"
 ON public.songs FOR INSERT WITH CHECK (auth.role() = 'authenticated');

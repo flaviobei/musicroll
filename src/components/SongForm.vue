@@ -1,8 +1,11 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 import { supabase } from '../lib/supabase'
-import { PlusCircle, Music, User, Sliders, FileText, Plus, Minus, Save } from '@lucide/vue'
+import { PlusCircle, Music, User, Sliders, FileText, Plus, Minus, Save, Share2 } from '@lucide/vue'
 import { transposePlainText } from '../lib/chordParser'
+import { useDemo } from '../composables/useDemo'
+
+const { isDemo } = useDemo()
 
 const props = defineProps({
   user: {
@@ -25,6 +28,7 @@ const duration = ref(4) // minutos
 const tone = ref('')
 const notes = ref('')
 const loading = ref(false)
+const isPublic = ref(false)
 
 const tapTimes = ref([])
 
@@ -53,6 +57,7 @@ const fillForm = () => {
     duration.value = Number(props.songToEdit.duration || 4)
     tone.value = props.songToEdit.tone || ''
     notes.value = props.songToEdit.notes || ''
+    isPublic.value = props.songToEdit.is_public || false
   } else {
     title.value = ''
     artist.value = ''
@@ -61,6 +66,7 @@ const fillForm = () => {
     duration.value = 4
     tone.value = ''
     notes.value = ''
+    isPublic.value = false
   }
 }
 
@@ -124,10 +130,11 @@ const handleSubmit = async () => {
       duration: Number(duration.value),
       tone: tone.value,
       notes: notes.value,
+      is_public: isPublic.value,
       user_id: isEditing ? props.songToEdit.user_id : (props.user ? props.user.id : null)
     }
 
-    const isDemo = !import.meta.env.VITE_SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL.includes('seu-projeto-supabase')
+    
     let savedSong = null
 
     if (isDemo) {
@@ -370,6 +377,19 @@ const handleSubmit = async () => {
           rows="2"
           maxlength="1000"
         ></textarea>
+      </div>
+
+      <div class="form-group" style="display: flex; align-items: center; gap: 0.75rem;">
+        <input
+          id="is-public"
+          type="checkbox"
+          v-model="isPublic"
+          style="width: 16px; height: 16px; cursor: pointer;"
+        />
+        <label for="is-public" class="form-label" style="margin: 0; cursor: pointer;">
+          <Share2 :size="14" style="vertical-align: middle; margin-right: 4px;" />
+          Tornar esta cifra pública (acessível por link)
+        </label>
       </div>
 
       <!-- Submit Button -->

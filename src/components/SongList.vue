@@ -24,10 +24,14 @@ import {
   Search,
   Filter,
   Plus,
-  Minus
+  Minus,
+  Link
 } from "@lucide/vue";
 import { parseAndTranspose } from "../lib/chordParser";
 import DOMPurify from "dompurify";
+import { useDemo } from "../composables/useDemo";
+
+const { isDemo } = useDemo();
 
 const props = defineProps({
   user: {
@@ -41,6 +45,9 @@ const emit = defineEmits(["show-notification", "edit-song"]);
 const songs = ref([]);
 const loading = ref(false);
 const activeSong = ref(null);
+const countdownActive = ref(false);
+const countdownValue = ref(5);
+let countdownInterval = null;
 
 // Search & Sort State
 const searchQuery = ref("");
@@ -82,10 +89,6 @@ const parsedSongContent = computed(() => {
   const sanitized = DOMPurify.sanitize(raw, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] });
   return parseAndTranspose(sanitized, transposeLevel.value);
 });
-
-const isDemo =
-  !import.meta.env.VITE_SUPABASE_URL ||
-  import.meta.env.VITE_SUPABASE_URL.includes("seu-projeto-supabase");
 
 const toggleImmersive = () => {
   isImmersive.value = !isImmersive.value;
@@ -243,6 +246,31 @@ const playPrevSong = () => {
   }
 };
 
+const copyShareLink = (song) => {
+  const url = `${window.location.origin}/#/song/${song.id}`;
+  navigator.clipboard.writeText(url);
+  emit("show-notification", { type: "success", message: "Link copiado!" });
+};
+
+const startCountdown = () => {
+  countdownActive.value = true;
+  countdownValue.value = 5;
+  countdownInterval = setInterval(() => {
+    countdownValue.value--;
+    if (countdownValue.value <= 0) {
+      clearInterval(countdownInterval);
+      countdownActive.value = false;
+      playNextSong();
+    }
+  }, 1000);
+};
+
+const cancelCountdown = () => {
+  clearInterval(countdownInterval);
+  countdownActive.value = false;
+  countdownValue.value = 5;
+};
+
 // Auto-Scroll Core using requestAnimationFrame (Calculado pelo BPM da Música!)
 const scrollStep = (timestamp) => {
   if (!isScrolling.value || !readerPanel.value) return;
@@ -269,10 +297,14 @@ const scrollStep = (timestamp) => {
     readerPanel.value.scrollHeight - readerPanel.value.clientHeight;
   if (readerPanel.value.scrollTop >= maxScroll - 1) {
     stopScroll();
-    emit("show-notification", {
-      type: "info",
-      message: "Fim da música alcançado.",
-    });
+    if (isSetlistMode.value && getNextSong()) {
+      startCountdown();
+    } else {
+      emit("show-notification", {
+        type: "info",
+        message: "Fim da música alcançado.",
+      });
+    }
   } else {
     lastTime = timestamp;
     animationId = requestAnimationFrame(scrollStep);
@@ -339,6 +371,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   stopScroll();
+  cancelCountdown();
   document.body.classList.remove("immersive-active");
 });
 </script>
@@ -437,6 +470,14 @@ onUnmounted(() => {
           <button @click="playNextSong" class="btn btn-next-song">
             Próxima Música ➔
           </button>
+        </div>
+
+        <!-- Countdown para próxima música -->
+        <div v-if="countdownActive" class="countdown-overlay">
+          <p class="countdown-label">Próxima música em</p>
+          <span class="countdown-number">{{ countdownValue }}</span>
+          <p class="countdown-next-title">{{ getNextSong()?.title }}</p>
+          <button @click="cancelCountdown" class="btn btn-secondary btn-sm">Cancelar</button>
         </div>
       </div>
 
@@ -549,6 +590,15 @@ onUnmounted(() => {
             'bpm-vermelho': Number(song.bpm || 120) > 120,
           }"
         >
+          <button
+            v-if="song.is_public"
+            @click.stop="copyShareLink(song)"
+            class="btn-share-icon"
+            title="Copiar link público"
+          >
+            <Link :size="14" />
+          </button>
+          
           <div class="song-info">
             <h4 class="song-title">{{ song.title }}</h4>
             <p class="song-artist">
@@ -607,6 +657,42 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+.countdown-overlay {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(10, 15, 30, 0.92);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid rgba(192, 132, 252, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.countdown-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.countdown-number {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #c084fc;
+  line-height: 1;
+}
+
+.countdown-next-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin: 0;
+}
+
 .mb-4 {
   margin-bottom: 1.5rem;
 }
@@ -754,12 +840,37 @@ onUnmounted(() => {
   background: rgba(15, 23, 42, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.04);
   border-radius: var(--radius-sm);
-  padding: 0.85rem 1rem;
+  padding: 0.75rem 0.85rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 0.6rem;
+  gap: 0.5rem;
   transition: all var(--transition-normal);
+  position: relative;
+}
+
+.btn-share-icon {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-muted);
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  z-index: 2;
+}
+
+.btn-share-icon:hover {
+  background: rgba(168, 85, 247, 0.2);
+  color: #c084fc;
+  border-color: rgba(168, 85, 247, 0.4);
 }
 
 .song-item-card:hover {
@@ -770,27 +881,28 @@ onUnmounted(() => {
 }
 
 .song-title {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 600;
   margin-bottom: 0.1rem;
+  padding-right: 1.5rem;
 }
 
 .song-artist {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.3rem;
 }
 
 .badge-row {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.4rem;
   flex-wrap: wrap;
 }
 
 .badge {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 600;
-  padding: 0.15rem 0.5rem;
+  padding: 0.1rem 0.4rem;
   border-radius: 9999px;
 }
 

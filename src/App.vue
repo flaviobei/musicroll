@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, nextTick } from "vue";
+import { ref, onMounted, nextTick, onUnmounted, watch } from "vue";
 import { supabase } from "./lib/supabase";
 import AuthForm from "./components/AuthForm.vue";
 import SongForm from "./components/SongForm.vue";
@@ -8,6 +8,8 @@ import SetlistManager from "./components/SetlistManager.vue";
 import Dashboard from "./components/Dashboard.vue";
 import AboutModal from "./components/AboutModal.vue";
 import EasterEggModal from "./components/EasterEggModal.vue";
+import SpotlightSearch from "./components/SpotlightSearch.vue";
+import PublicSongView from "./components/PublicSongView.vue";
 import {
   LogOut,
   User,
@@ -44,6 +46,35 @@ const showNerdModal = ref(false);
 const currentView = ref("menu"); // views: menu, songs_list, song_create, setlists
 const songToEdit = ref(null);
 const songListRef = ref(null);
+const showSpotlight = ref(false);
+const allSongs = ref([]);
+const publicSongId = ref(null);
+
+const handleGlobalKey = (e) => {
+  if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+    e.preventDefault();
+    showSpotlight.value = true;
+  }
+};
+
+const checkSupabaseConfigured = () => {
+  const url = import.meta.env.VITE_SUPABASE_URL;
+  return url && !url.includes("seu-projeto-supabase");
+};
+
+watch(user, async (newUser) => {
+  if (newUser) {
+    const isDemo = checkSupabaseConfigured() === false;
+    if (isDemo) {
+      allSongs.value = JSON.parse(localStorage.getItem("musicroll_songs") || "[]");
+    } else {
+      const { data } = await supabase.from("songs").select("id, title, artist, bpm, tone").eq("user_id", newUser.id);
+      if (data) allSongs.value = data;
+    }
+  } else {
+    allSongs.value = [];
+  }
+}, { immediate: true });
 
 // PWA Install State
 const deferredPrompt = ref(null);
@@ -66,6 +97,13 @@ onErrorCaptured((err, instance, info) => {
 const isDev = import.meta.env.DEV;
 
 onMounted(() => {
+  // Detectar rota de compartilhamento: /#/song/UUID
+  const hash = window.location.hash;
+  const match = hash.match(/^#\/song\/([a-f0-9-]{36})$/);
+  if (match) {
+    publicSongId.value = match[1];
+  }
+
   // Verificar se é iOS
   const userAgent = window.navigator.userAgent.toLowerCase();
   isIOS.value = /iphone|ipad|ipod/.test(userAgent);
@@ -101,6 +139,12 @@ onMounted(() => {
   supabase.auth.onAuthStateChange((_event, session) => {
     user.value = session?.user || null;
   });
+
+  window.addEventListener("keydown", handleGlobalKey);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("keydown", handleGlobalKey);
 });
 
 // Toast State
@@ -200,11 +244,6 @@ const handleOpenPresentation = (payload) => {
       }, 300);
     }
   }, 400);
-};
-
-const checkSupabaseConfigured = () => {
-  const url = import.meta.env.VITE_SUPABASE_URL;
-  return url && !url.includes("seu-projeto-supabase");
 };
 
 const installApp = async () => {
@@ -339,8 +378,10 @@ const installApp = async () => {
 
     <!-- Main Content Area -->
     <main class="main-content">
+      <PublicSongView v-if="publicSongId" :songId="publicSongId" />
+
       <div
-        v-if="fatalError"
+        v-else-if="fatalError"
         class="alert alert-danger-custom m-4"
         style="
           text-align: left;
@@ -470,6 +511,13 @@ const installApp = async () => {
     <EasterEggModal
       :show="showNerdModal"
       @close="showNerdModal = false"
+    />
+
+    <SpotlightSearch
+      v-if="showSpotlight"
+      :songs="allSongs"
+      @play="handlePlaySong"
+      @close="showSpotlight = false"
     />
   </div>
 </template>
