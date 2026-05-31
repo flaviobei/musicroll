@@ -1,8 +1,17 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { supabase } from "../lib/supabase";
-import { Play, Music, Layers, PlusCircle, Clock, Info } from "@lucide/vue";
+import {
+  Play,
+  Music,
+  Layers,
+  PlusCircle,
+  Clock,
+  Info,
+  MessageSquare,
+} from "@lucide/vue";
 import UpdatesModal from "./UpdatesModal.vue";
+import FeedbackModal from "./FeedbackModal.vue";
 import { useDemo } from "../composables/useDemo";
 
 const { isDemo } = useDemo();
@@ -17,6 +26,7 @@ const recentSongs = ref([]);
 const recentSetlists = ref([]);
 const loading = ref(true);
 const showUpdatesModal = ref(false);
+const showFeedbackModal = ref(false);
 
 const fetchRecentData = async () => {
   if (!props.user) return;
@@ -63,7 +73,6 @@ const fetchRecentData = async () => {
 };
 
 const playSetlist = async (setlist) => {
-
   if (isDemo) {
     const local = localStorage.getItem(`musicroll_setlist_songs_${setlist.id}`);
     const songs = local ? JSON.parse(local) : [];
@@ -114,10 +123,14 @@ onMounted(() => {
           <p class="text-muted">{{ $t("dashboard.subtitle") }}</p>
           <br />
         </div>
-
-        <button @click="showUpdatesModal = true" class="btn-updates">
-          <Info :size="16" /> Novidades
-        </button>
+        <div class="header-buttons">
+          <button @click="showUpdatesModal = true" class="btn-updates">
+            <Info :size="16" /> Novidades
+          </button>
+          <button @click="showFeedbackModal = true" class="btn-updates">
+            <MessageSquare :size="16" /> Sugestões
+          </button>
+        </div>
       </div>
     </div>
 
@@ -227,8 +240,13 @@ onMounted(() => {
       </div>
     </div>
 
-    <!-- Modal Últimas Atualizações -->
+    <!-- Modals -->
     <UpdatesModal v-if="showUpdatesModal" @close="showUpdatesModal = false" />
+    <FeedbackModal
+      v-if="showFeedbackModal"
+      :show="showFeedbackModal"
+      @close="showFeedbackModal = false"
+    />
   </div>
 </template>
 
@@ -243,6 +261,13 @@ onMounted(() => {
   align-items: flex-start;
   flex-wrap: wrap;
   gap: 1rem;
+}
+
+.header-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  align-items: center;
 }
 
 .btn-updates {

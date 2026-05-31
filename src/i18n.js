@@ -6,6 +6,8 @@ const messages = {
       logout: "Sair",
       loading: "Carregando...",
       close: "Fechar",
+      cancel: "Cancelar",
+      sending: "Enviando...",
       install: "Instalar",
       installTitle: "Instale o MusicRoll",
       installAndroid: "Tenha o aplicativo na tela inicial do seu celular.",
@@ -46,6 +48,20 @@ const messages = {
           <li><strong>Baixar Setlist:</strong> Opção de baixar o setlist completo num arquivo de texto pro uso offline.</li>
         </ul>
       `,
+    },
+    feedback: {
+      title: "Sugestões e Erros",
+      description: "Encontrou um erro ou tem uma ideia legal pro MusicRoll? Manda pra gente!",
+      typeLabel: "Sobre o que você quer falar?",
+      typeBug: "Reportar Erro",
+      typeIdea: "Ideia / Sugestão",
+      typeOther: "Outros",
+      messageLabel: "Sua mensagem",
+      messagePlaceholder: "Descreva em detalhes o erro ou sua ideia...",
+      submit: "Enviar Mensagem",
+      error: "Ocorreu um erro ao enviar. Tente novamente mais tarde.",
+      successTitle: "Mensagem Enviada!",
+      successMessage: "Obrigado pelo seu feedback! Ele nos ajuda a melhorar o app."
     },
     nerd: {
       title: "Easter Egg Encontrado!",
@@ -141,6 +157,8 @@ const messages = {
       logout: "Logout",
       loading: "Loading...",
       close: "Close",
+      cancel: "Cancel",
+      sending: "Sending...",
       install: "Install",
       installTitle: "Install MusicRoll",
       installAndroid: "Get the app on your home screen.",
@@ -181,6 +199,20 @@ const messages = {
           <li><strong>Download Setlist:</strong> Option to download the full setlist as a text file for offline use.</li>
         </ul>
       `,
+    },
+    feedback: {
+      title: "Feedback & Bugs",
+      description: "Found a bug or have a cool idea for MusicRoll? Let us know!",
+      typeLabel: "What is this about?",
+      typeBug: "Report Bug",
+      typeIdea: "Idea / Suggestion",
+      typeOther: "Other",
+      messageLabel: "Your message",
+      messagePlaceholder: "Describe the bug or your idea in detail...",
+      submit: "Send Message",
+      error: "An error occurred while sending. Please try again later.",
+      successTitle: "Message Sent!",
+      successMessage: "Thank you for your feedback! It helps us improve the app."
     },
     nerd: {
       title: "Easter Egg Found!",
@@ -276,6 +308,8 @@ const messages = {
       logout: "Cerrar Sesión",
       loading: "Cargando...",
       close: "Cerrar",
+      cancel: "Cancelar",
+      sending: "Enviando...",
       install: "Instalar",
       installTitle: "Instala MusicRoll",
       installAndroid: "Obtén la aplicación en tu pantalla de inicio.",
@@ -316,6 +350,20 @@ const messages = {
           <li><strong>Descargar Setlist:</strong> Opción para descargar el setlist completo como archivo de texto para uso offline.</li>
         </ul>
       `,
+    },
+    feedback: {
+      title: "Sugerencias y Errores",
+      description: "¿Encontraste un error o tienes una buena idea para MusicRoll? ¡Envíanosla!",
+      typeLabel: "¿Sobre qué quieres hablar?",
+      typeBug: "Reportar Error",
+      typeIdea: "Idea / Sugerencia",
+      typeOther: "Otros",
+      messageLabel: "Tu mensaje",
+      messagePlaceholder: "Describe el error o tu idea en detalle...",
+      submit: "Enviar Mensaje",
+      error: "Ocurrió un error al enviar. Por favor, inténtalo de nuevo más tarde.",
+      successTitle: "¡Mensaje Enviado!",
+      successMessage: "¡Gracias por tu feedback! Nos ayuda a mejorar la aplicación."
     },
     nerd: {
       title: "¡Easter Egg Encontrado!",

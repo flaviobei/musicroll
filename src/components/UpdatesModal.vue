@@ -5,6 +5,7 @@ defineEmits(["close"]);
 </script>
 
 <template>
+  <br />
   <div class="modal-overlay" @click="$emit('close')">
     <div class="modal-content glass-panel" @click.stop>
       <div class="modal-header">
