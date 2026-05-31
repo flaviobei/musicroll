@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { supabase } from '../lib/supabase'
 import { Mail, Lock, LogIn, UserPlus, Info } from '@lucide/vue'
 
-const emit = defineEmits(['auth-success'])
+const emit = defineEmits(['auth-success', 'open-about'])
 
 const isSignUp = ref(false)
 const email = ref('')
@@ -130,6 +130,13 @@ const toggleMode = () => {
         <span>{{ isSignUp ? $t('auth.hasAccount') : $t('auth.newHere') }}</span>
         <button @click="toggleMode" class="btn-toggle">
           {{ isSignUp ? $t('auth.clickLogin') : $t('auth.clickSignup') }}
+        </button>
+      </div>
+      
+      <div class="about-link-container">
+        <button type="button" @click="emit('open-about')" class="btn-about-link">
+          <Info :size="16" />
+          {{ $t('about.title') }}
         </button>
       </div>
       
@@ -276,5 +283,28 @@ const toggleMode = () => {
 
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+.about-link-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.btn-about-link {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-family: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: color var(--transition-fast);
+}
+
+.btn-about-link:hover {
+  color: var(--text-main);
 }
 </style>

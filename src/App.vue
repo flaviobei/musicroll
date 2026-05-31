@@ -367,7 +367,7 @@ const installApp = async () => {
       <!-- MODO DE AUTENTICAÇÃO -->
       <transition v-else name="fade" mode="out-in">
         <div v-if="!user" key="auth">
-          <AuthForm @auth-success="handleAuthSuccess" />
+          <AuthForm @auth-success="handleAuthSuccess" @open-about="showAboutModal = true" />
         </div>
 
         <!-- DASHBOARD (PÁGINA PRINCIPAL APÓS LOGIN) -->
