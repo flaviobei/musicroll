@@ -27,6 +27,7 @@ import {
   Minus
 } from "@lucide/vue";
 import { parseAndTranspose } from "../lib/chordParser";
+import DOMPurify from "dompurify";
 
 const props = defineProps({
   user: {
@@ -77,7 +78,9 @@ const fontSize = ref(1.0);
 const transposeLevel = ref(0);
 
 const parsedSongContent = computed(() => {
-  return parseAndTranspose(activeSong.value?.content || '', transposeLevel.value);
+  const raw = activeSong.value?.content || '';
+  const sanitized = DOMPurify.sanitize(raw, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] });
+  return parseAndTranspose(sanitized, transposeLevel.value);
 });
 
 const isDemo =

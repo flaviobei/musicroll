@@ -18,6 +18,11 @@ const handleAuth = async () => {
     return
   }
   
+  if (isSignUp.value && password.value.length < 8) {
+    errorMessage.value = 'A senha deve ter no mínimo 8 caracteres.'
+    return
+  }
+  
   loading.value = true
   errorMessage.value = ''
   successMessage.value = ''
@@ -106,6 +111,7 @@ const toggleMode = () => {
               type="password" 
               v-model="password" 
               :placeholder="$t('auth.passwordPlaceholder')" 
+              :minlength="isSignUp ? 8 : undefined"
               class="form-input"
               required 
             />

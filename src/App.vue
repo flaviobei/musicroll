@@ -63,6 +63,8 @@ onErrorCaptured((err, instance, info) => {
   return false; // stop propagation
 });
 
+const isDev = import.meta.env.DEV;
+
 onMounted(() => {
   // Verificar se é iOS
   const userAgent = window.navigator.userAgent.toLowerCase();
@@ -354,6 +356,7 @@ const installApp = async () => {
         <p><strong>Mensagem:</strong> {{ fatalError.message }}</p>
         <p><strong>Contexto:</strong> {{ fatalError.info }}</p>
         <pre
+          v-if="isDev"
           style="
             margin-top: 10px;
             font-size: 11px;

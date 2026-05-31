@@ -180,6 +180,19 @@ h6 {
   tab-size: 4;
 }
 
+/* Layout Utilities */
+.mb-4 {
+  margin-bottom: 1.5rem;
+}
+.back-bar {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.btn-sm {
+  padding: 0.4rem 0.8rem !important;
+  font-size: 0.85rem !important;
+}
+
 /* Premium Buttons */
 .btn {
   align-items: center;
