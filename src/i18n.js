@@ -30,7 +30,7 @@ const messages = {
         </p>
         <p>
           <b>Sobre o criador</b><br />
-          Flavio Bei é luthier, baixista e programador. <br />Conheça mais do meu trabalho <br /><br />
+          Flavio Bei é luthier, baixista e programador (nessa ordem!!!) <br />Conheça mais do meu trabalho <br /><br />
           <a href="https://www.instagram.com/flaviobei/" target="_blank" class="link-social link-instagram">Instagram</a>
           /
           <a href="https://www.youtube.com/{'@'}flaviobei?sub_confirmation=1" target="_blank" class="link-social link-youtube">Youtube</a>
@@ -51,7 +51,8 @@ const messages = {
     },
     feedback: {
       title: "Sugestões e Erros",
-      description: "Encontrou um erro ou tem uma ideia legal pro MusicRoll? Manda pra gente!",
+      description:
+        "Encontrou um erro ou tem uma ideia legal pro MusicRoll? Manda pra gente!",
       typeLabel: "Sobre o que você quer falar?",
       typeBug: "Reportar Erro",
       typeIdea: "Ideia / Sugestão",
@@ -61,7 +62,8 @@ const messages = {
       submit: "Enviar Mensagem",
       error: "Ocorreu um erro ao enviar. Tente novamente mais tarde.",
       successTitle: "Mensagem Enviada!",
-      successMessage: "Obrigado pelo seu feedback! Ele nos ajuda a melhorar o app."
+      successMessage:
+        "Obrigado pelo seu feedback! Ele nos ajuda a melhorar o app.",
     },
     nerd: {
       title: "Easter Egg Encontrado!",
@@ -181,7 +183,7 @@ const messages = {
         </p>
         <p>
           <b>About the creator</b><br />
-          Flavio Bei is a luthier, bassist, and programmer. <br />Check out more of my work <br /><br />
+          Flavio Bei is a luthier, bassist, and programmer. (in that order!!!) <br />Check out more of my work <br /><br />
           <a href="https://www.instagram.com/flaviobei/" target="_blank" class="link-social link-instagram">Instagram</a>
           /
           <a href="https://www.youtube.com/{'@'}flaviobei?sub_confirmation=1" target="_blank" class="link-social link-youtube">Youtube</a>
@@ -202,7 +204,8 @@ const messages = {
     },
     feedback: {
       title: "Feedback & Bugs",
-      description: "Found a bug or have a cool idea for MusicRoll? Let us know!",
+      description:
+        "Found a bug or have a cool idea for MusicRoll? Let us know!",
       typeLabel: "What is this about?",
       typeBug: "Report Bug",
       typeIdea: "Idea / Suggestion",
@@ -212,7 +215,8 @@ const messages = {
       submit: "Send Message",
       error: "An error occurred while sending. Please try again later.",
       successTitle: "Message Sent!",
-      successMessage: "Thank you for your feedback! It helps us improve the app."
+      successMessage:
+        "Thank you for your feedback! It helps us improve the app.",
     },
     nerd: {
       title: "Easter Egg Found!",
@@ -332,7 +336,7 @@ const messages = {
         </p>
         <p>
           <b>Sobre el creador</b><br />
-          Flavio Bei es luthier, bajista y programador. <br />Conoce más de mi trabajo <br /><br />
+          Flavio Bei es luthier, bajista y programador. (en ese orden!)<br />Conoce más de mi trabajo <br /><br />
           <a href="https://www.instagram.com/flaviobei/" target="_blank" class="link-social link-instagram">Instagram</a>
           /
           <a href="https://www.youtube.com/{'@'}flaviobei?sub_confirmation=1" target="_blank" class="link-social link-youtube">Youtube</a>
@@ -353,7 +357,8 @@ const messages = {
     },
     feedback: {
       title: "Sugerencias y Errores",
-      description: "¿Encontraste un error o tienes una buena idea para MusicRoll? ¡Envíanosla!",
+      description:
+        "¿Encontraste un error o tienes una buena idea para MusicRoll? ¡Envíanosla!",
       typeLabel: "¿Sobre qué quieres hablar?",
       typeBug: "Reportar Error",
       typeIdea: "Idea / Sugerencia",
@@ -361,9 +366,11 @@ const messages = {
       messageLabel: "Tu mensaje",
       messagePlaceholder: "Describe el error o tu idea en detalle...",
       submit: "Enviar Mensaje",
-      error: "Ocurrió un error al enviar. Por favor, inténtalo de nuevo más tarde.",
+      error:
+        "Ocurrió un error al enviar. Por favor, inténtalo de nuevo más tarde.",
       successTitle: "¡Mensaje Enviado!",
-      successMessage: "¡Gracias por tu feedback! Nos ayuda a mejorar la aplicación."
+      successMessage:
+        "¡Gracias por tu feedback! Nos ayuda a mejorar la aplicación.",
     },
     nerd: {
       title: "¡Easter Egg Encontrado!",
