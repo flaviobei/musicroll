@@ -14,7 +14,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['show-notification', 'open-presentation'])
+const emit = defineEmits(['show-notification', 'open-presentation', 'navigate'])
 
 const setlists = ref([])
 const availableSongs = ref([])
@@ -516,9 +516,32 @@ onMounted(() => {
         
         <!-- COLUNA ESQUERDA: LISTA DE SETLISTS & CADASTRO -->
         <div class="setlists-sidebar">
+          <!-- Banner de Aviso se não houver músicas no acervo -->
+          <div v-if="availableSongs.length === 0" class="no-songs-alert glass-panel mb-3">
+            <div class="alert-header">
+              <AlertCircle :size="16" class="warning-icon" />
+              <strong>{{ $t('setlists.noSongsWarningTitle') }}</strong>
+            </div>
+            <p class="alert-desc">{{ $t('setlists.noSongsWarningDesc') }}</p>
+            <button type="button" @click="$emit('navigate', 'song_create')" class="btn btn-primary btn-sm btn-block">
+              <Plus :size="12" style="margin-right: 0.2rem;" />
+              <span>{{ $t('setlists.registerFirstSong') }}</span>
+            </button>
+          </div>
+
           <form @submit.prevent="createSetlist" class="create-setlist-form">
             <div class="form-group mb-2">
-              <label class="form-label" for="new-setlist-name">{{ $t('setlists.newSetlist') }}</label>
+              <div class="label-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+                <label class="form-label" for="new-setlist-name" style="margin: 0;">{{ $t('setlists.newSetlist') }}</label>
+                <button 
+                  type="button" 
+                  @click="$emit('navigate', 'song_create')" 
+                  class="btn-link-action"
+                  title="Cadastrar Nova Cifra"
+                >
+                  + {{ $t('setlists.registerFirstSong') }}
+                </button>
+              </div>
               <div class="input-with-icon">
                 <FolderPlus class="input-icon" :size="16" />
                 <input 
@@ -740,7 +763,13 @@ onMounted(() => {
 
                 <div v-if="filteredAcervo.length === 0" class="pane-empty">
                   <span v-if="searchAcervo">{{ $t('setlists.noSongsSearch') }}</span>
-                  <span v-else>{{ $t('setlists.noSongsLibrary') }}</span>
+                  <div v-else class="empty-library-cta">
+                    <p style="margin-bottom: 0.75rem;">{{ $t('setlists.noSongsLibrary') }}</p>
+                    <button type="button" @click="$emit('navigate', 'song_create')" class="btn btn-secondary btn-sm btn-block">
+                      <Plus :size="12" style="margin-right: 0.2rem;" />
+                      <span>{{ $t('setlists.registerFirstSong') }}</span>
+                    </button>
+                  </div>
                 </div>
                 <div v-else class="available-songs-list">
                   <div 
@@ -1344,6 +1373,53 @@ onMounted(() => {
 
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+/* Custom styles for empty library and song registration CTA */
+.no-songs-alert {
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px dashed rgba(245, 158, 11, 0.3);
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1.5rem;
+}
+
+.alert-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #fbbf24;
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.alert-desc {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin-bottom: 0.75rem;
+}
+
+.btn-link-action {
+  font-size: 0.75rem;
+  color: #c084fc;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: color var(--transition-fast);
+}
+
+.btn-link-action:hover {
+  color: #a855f7;
+  text-decoration: underline;
+}
+
+.empty-library-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 @media (max-width: 800px) {

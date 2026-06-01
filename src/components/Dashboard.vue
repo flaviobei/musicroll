@@ -9,6 +9,7 @@ import {
   Clock,
   Info,
   MessageSquare,
+  Sparkles,
 } from "@lucide/vue";
 import UpdatesModal from "./UpdatesModal.vue";
 import FeedbackModal from "./FeedbackModal.vue";
@@ -160,81 +161,97 @@ onMounted(() => {
       <span>{{ $t("app.loading") }}</span>
     </div>
 
-    <div v-else class="dashboard-content-grid">
-      <!-- Ultimas Musicas -->
-      <div class="dashboard-card">
-        <h3 class="dashboard-card-title">
-          <Clock :size="18" /> {{ $t("dashboard.latestSongs") }}
-        </h3>
-
-        <div v-if="recentSongs.length === 0" class="empty-state-mini">
-          {{ $t("dashboard.emptySongs") }}
-        </div>
-
-        <div v-else class="recent-list">
-          <div
-            v-for="song in recentSongs"
-            :key="song.id"
-            class="recent-item song-item"
-            :class="{
-              'bpm-azul': Number(song.bpm || 120) < 50,
-              'bpm-verde':
-                Number(song.bpm || 120) >= 50 && Number(song.bpm || 120) < 90,
-              'bpm-laranja':
-                Number(song.bpm || 120) >= 90 && Number(song.bpm || 120) <= 120,
-              'bpm-vermelho': Number(song.bpm || 120) > 120,
-            }"
-            @click="$emit('play-song', song)"
-          >
-            <div class="recent-meta">
-              <span class="recent-title">
-                {{ song.title }}
-                <span
-                  v-if="Number(song.bpm || 120) > 180"
-                  title="Acima de 180 BPM"
-                  >🌶️</span
-                >
-              </span>
-              <span class="recent-subtitle">
-                {{ song.artist }} | {{ song.bpm }} BPM
-                <span v-if="song.tone">| Tom: {{ song.tone }}</span>
-              </span>
-            </div>
-            <button class="btn-icon-only text-primary" title="Tocar Agora">
-              <Play :size="16" />
-            </button>
+    <div v-else>
+      <!-- Banner de Boas-vindas/Aviso se não houver músicas -->
+      <div v-if="recentSongs.length === 0" class="welcome-alert glass-panel mb-4">
+        <div class="alert-content">
+          <Sparkles class="alert-icon-sparkle" :size="28" />
+          <div class="alert-text-group">
+            <h4>{{ $t("dashboard.emptyWelcomeTitle") }}</h4>
+            <p>{{ $t("dashboard.emptyWelcomeDesc") }}</p>
           </div>
         </div>
+        <button @click="$emit('navigate', 'song_create')" class="btn btn-primary btn-cta-welcome">
+          <PlusCircle :size="16" /> {{ $t("dashboard.createFirstSong") }}
+        </button>
       </div>
 
-      <!-- Ultimos Setlists -->
-      <div class="dashboard-card">
-        <h3 class="dashboard-card-title">
-          <Clock :size="18" /> {{ $t("dashboard.latestSetlists") }}
-        </h3>
+      <div class="dashboard-content-grid">
+        <!-- Ultimas Musicas -->
+        <div class="dashboard-card">
+          <h3 class="dashboard-card-title">
+            <Clock :size="18" /> {{ $t("dashboard.latestSongs") }}
+          </h3>
 
-        <div v-if="recentSetlists.length === 0" class="empty-state-mini">
-          {{ $t("dashboard.emptySetlists") }}
+          <div v-if="recentSongs.length === 0" class="empty-state-mini">
+            {{ $t("dashboard.emptySongs") }}
+          </div>
+
+          <div v-else class="recent-list">
+            <div
+              v-for="song in recentSongs"
+              :key="song.id"
+              class="recent-item song-item"
+              :class="{
+                'bpm-azul': Number(song.bpm || 120) < 50,
+                'bpm-verde':
+                  Number(song.bpm || 120) >= 50 && Number(song.bpm || 120) < 90,
+                'bpm-laranja':
+                  Number(song.bpm || 120) >= 90 && Number(song.bpm || 120) <= 120,
+                'bpm-vermelho': Number(song.bpm || 120) > 120,
+              }"
+              @click="$emit('play-song', song)"
+            >
+              <div class="recent-meta">
+                <span class="recent-title">
+                  {{ song.title }}
+                  <span
+                    v-if="Number(song.bpm || 120) > 180"
+                    title="Acima de 180 BPM"
+                    >🌶️</span
+                  >
+                </span>
+                <span class="recent-subtitle">
+                  {{ song.artist }} | {{ song.bpm }} BPM
+                  <span v-if="song.tone">| Tom: {{ song.tone }}</span>
+                </span>
+              </div>
+              <button class="btn-icon-only text-primary" title="Tocar Agora">
+                <Play :size="16" />
+              </button>
+            </div>
+          </div>
         </div>
 
-        <div v-else class="recent-list">
-          <div
-            v-for="setlist in recentSetlists"
-            :key="setlist.id"
-            class="recent-item setlist-item"
-            @click="playSetlist(setlist)"
-          >
-            <div class="recent-meta">
-              <span class="recent-title">{{ setlist.name }}</span>
-              <span class="recent-subtitle">{{
-                new Date(setlist.created_at || Date.now()).toLocaleDateString(
-                  "pt-BR",
-                )
-              }}</span>
+        <!-- Ultimos Setlists -->
+        <div class="dashboard-card">
+          <h3 class="dashboard-card-title">
+            <Clock :size="18" /> {{ $t("dashboard.latestSetlists") }}
+          </h3>
+
+          <div v-if="recentSetlists.length === 0" class="empty-state-mini">
+            {{ $t("dashboard.emptySetlists") }}
+          </div>
+
+          <div v-else class="recent-list">
+            <div
+              v-for="setlist in recentSetlists"
+              :key="setlist.id"
+              class="recent-item setlist-item"
+              @click="playSetlist(setlist)"
+            >
+              <div class="recent-meta">
+                <span class="recent-title">{{ setlist.name }}</span>
+                <span class="recent-subtitle">{{
+                  new Date(setlist.created_at || Date.now()).toLocaleDateString(
+                    "pt-BR",
+                  )
+                }}</span>
+              </div>
+              <button class="btn-icon-only text-primary" title="Iniciar Show">
+                <Play :size="16" />
+              </button>
             </div>
-            <button class="btn-icon-only text-primary" title="Iniciar Show">
-              <Play :size="16" />
-            </button>
           </div>
         </div>
       </div>
@@ -389,6 +406,82 @@ onMounted(() => {
   border-radius: var(--radius-sm);
 }
 
+/* Custom premium styling for Empty Library Welcome Banner */
+.welcome-alert {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.75rem 2rem;
+  background: linear-gradient(
+    135deg,
+    rgba(168, 85, 247, 0.12) 0%,
+    rgba(236, 72, 153, 0.12) 100%
+  );
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  border-radius: var(--radius-md);
+  margin-top: 1rem;
+}
+
+.alert-content {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.alert-icon-sparkle {
+  color: #c084fc;
+  animation: float 3s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+.alert-text-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.alert-text-group h4 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.alert-text-group p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.btn-cta-welcome {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(168, 85, 247, 0.3);
+  transition: all var(--transition-fast);
+}
+
+.btn-cta-welcome:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(168, 85, 247, 0.5);
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
 /* ---- Responsive: iPhone SE e telas pequenas ---- */
 @media (max-width: 430px) {
   .dashboard-panel {
@@ -431,6 +524,18 @@ onMounted(() => {
 
   .dashboard-card {
     padding: 1rem;
+  }
+
+  .welcome-alert {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.5rem;
+    gap: 1.25rem;
+  }
+
+  .btn-cta-welcome {
+    width: 100%;
+    justify-content: center;
   }
 }
 </style>

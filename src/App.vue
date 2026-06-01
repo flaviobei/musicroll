@@ -476,6 +476,7 @@ const installApp = async () => {
             :user="user"
             @show-notification="handleNotification"
             @open-presentation="handleOpenPresentation"
+            @navigate="(v) => (currentView = v)"
           />
         </div>
       </transition>

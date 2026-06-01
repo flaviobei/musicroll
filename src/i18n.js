@@ -113,6 +113,9 @@ const messages = {
       latestSetlists: "Setlists Recentes",
       emptySongs: "Nenhuma música cadastrada ainda.",
       emptySetlists: "Nenhum setlist criado ainda.",
+      emptyWelcomeTitle: "Dê o play na sua jornada musical! 🎸",
+      emptyWelcomeDesc: "O MusicRoll está pronto, mas seu acervo ainda está vazio. Cadastre sua primeira cifra para liberar o rolador automático e montar seus setlists!",
+      createFirstSong: "Cadastrar Minha Primeira Cifra",
     },
     songs: {
       title: "Cifras",
@@ -175,6 +178,9 @@ const messages = {
       loginTitle: "Faça login para criar setlists",
       loginDesc:
         "As setlists são associadas à sua conta na nuvem para manter a segurança do banco.",
+      noSongsWarningTitle: "Nenhuma música cadastrada",
+      noSongsWarningDesc: "Para criar e montar um setlist completo, você precisa primeiro ter músicas cadastradas no seu acervo.",
+      registerFirstSong: "Cadastrar Cifra",
     },
     public: {
       loading: "Carregando cifra...",
@@ -294,6 +300,9 @@ const messages = {
       latestSetlists: "Recent Setlists",
       emptySongs: "No songs added yet.",
       emptySetlists: "No setlists created yet.",
+      emptyWelcomeTitle: "Start your musical journey! 🎸",
+      emptyWelcomeDesc: "MusicRoll is ready, but your library is empty. Register your first song to unlock the automatic scroll and build your setlists!",
+      createFirstSong: "Register My First Song",
     },
     songs: {
       title: "My Chords",
@@ -356,6 +365,9 @@ const messages = {
       loginTitle: "Log in to create setlists",
       loginDesc:
         "Setlists are linked to your cloud account to keep your data safe.",
+      noSongsWarningTitle: "No songs registered yet",
+      noSongsWarningDesc: "To create and build a complete setlist, you first need to have songs registered in your library.",
+      registerFirstSong: "Register Song",
     },
     public: {
       loading: "Loading chord...",
@@ -476,6 +488,9 @@ const messages = {
       latestSetlists: "Setlists Recientes",
       emptySongs: "Aún no has añadido canciones.",
       emptySetlists: "Aún no has creado setlists.",
+      emptyWelcomeTitle: "¡Inicia tu viaje musical! 🎸",
+      emptyWelcomeDesc: "¡MusicRoll está listo, mas tu repertorio está vacío. Registra tu primera canción para activar el desplazamiento automático y armar tus setlists!",
+      createFirstSong: "Registrar Mi Primera Canción",
     },
     songs: {
       title: "Mis Acordes",
@@ -538,6 +553,9 @@ const messages = {
       loginTitle: "Inicia sesión para crear setlists",
       loginDesc:
         "Los setlists están asociados a tu cuenta en la nube para mantener la seguridad.",
+      noSongsWarningTitle: "No hay canciones registradas",
+      noSongsWarningDesc: "Para crear y armar un setlist completo, primero necesitas tener canciones registradas en tu repertorio.",
+      registerFirstSong: "Registrar Canción",
     },
     public: {
       loading: "Cargando acorde...",
