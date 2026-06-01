@@ -388,4 +388,49 @@ onMounted(() => {
   background: rgba(0, 0, 0, 0.2);
   border-radius: var(--radius-sm);
 }
+
+/* ---- Responsive: iPhone SE e telas pequenas ---- */
+@media (max-width: 430px) {
+  .dashboard-panel {
+    padding: 1rem 0.75rem;
+  }
+
+  .dashboard-header-top {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .header-buttons {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 0.5rem;
+  }
+
+  .btn-updates {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.7rem;
+  }
+
+  .quick-actions-row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .btn-action {
+    min-width: unset;
+    width: 100%;
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .dashboard-content-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .dashboard-card {
+    padding: 1rem;
+  }
+}
 </style>

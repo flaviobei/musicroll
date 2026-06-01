@@ -5,22 +5,23 @@ defineEmits(["close"]);
 </script>
 
 <template>
-  <br />
-  <div class="modal-overlay" @click="$emit('close')">
-    <div class="modal-content glass-panel" @click.stop>
-      <div class="modal-header">
-        <h3 class="gradient-text-primary">{{ $t("updates.title") }}</h3>
-        <button
-          @click="$emit('close')"
-          class="btn-icon"
-          :title="$t('app.close')"
-        >
-          <X :size="20" />
-        </button>
+  <Teleport to="body">
+    <div class="modal-overlay" @click="$emit('close')">
+      <div class="modal-content glass-panel" @click.stop>
+        <div class="modal-header">
+          <h3 class="gradient-text-primary">{{ $t("updates.title") }}</h3>
+          <button
+            @click="$emit('close')"
+            class="btn-icon"
+            :title="$t('app.close')"
+          >
+            <X :size="20" />
+          </button>
+        </div>
+        <div class="modal-body" v-html="$t('updates.content')"></div>
       </div>
-      <div class="modal-body" v-html="$t('updates.content')"></div>
     </div>
-  </div>
+  </Teleport>
 </template>
 
 <style scoped>

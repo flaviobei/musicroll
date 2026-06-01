@@ -506,8 +506,8 @@ onMounted(() => {
       <div v-if="!isDemo && !user" class="login-warning">
         <AlertCircle :size="24" class="warning-icon" />
         <div>
-          <h5>Faça login para criar setlists</h5>
-          <p>As setlists são associadas à sua conta na nuvem para manter a segurança do banco.</p>
+          <h5>{{ $t('setlists.loginTitle') }}</h5>
+          <p>{{ $t('setlists.loginDesc') }}</p>
         </div>
       </div>
 
@@ -518,14 +518,14 @@ onMounted(() => {
         <div class="setlists-sidebar">
           <form @submit.prevent="createSetlist" class="create-setlist-form">
             <div class="form-group mb-2">
-              <label class="form-label" for="new-setlist-name">Nova Setlist</label>
+              <label class="form-label" for="new-setlist-name">{{ $t('setlists.newSetlist') }}</label>
               <div class="input-with-icon">
                 <FolderPlus class="input-icon" :size="16" />
                 <input 
                   id="new-setlist-name" 
                   type="text" 
                   v-model="newSetName" 
-                  placeholder="Ex: Show de Sexta" 
+                  :placeholder="$t('setlists.setlistPlaceholder')" 
                   class="form-input form-input-sm"
                   required 
                 />
@@ -533,17 +533,17 @@ onMounted(() => {
             </div>
             <button type="submit" class="btn btn-primary btn-sm btn-block">
               <Plus :size="14" />
-              <span>Criar Setlist</span>
+              <span>{{ $t('setlists.create') }}</span>
             </button>
           </form>
 
           <div class="setlists-menu">
-            <h4 class="section-title">Minhas Setlists</h4>
+            <h4 class="section-title">{{ $t('setlists.mySetlists') }}</h4>
             <div v-if="loading" class="sidebar-loading">
               <span class="spinner"></span>
             </div>
             <div v-else-if="setlists.length === 0" class="sidebar-empty">
-              Nenhuma setlist criada.
+              {{ $t('setlists.noSetlists') }}
             </div>
             <div v-else class="setlists-list">
               <div 
@@ -651,7 +651,7 @@ onMounted(() => {
             <div class="details-grid">
               <!-- MÚSICAS DA SETLIST -->
               <div class="setlist-songs-pane">
-                <h5 class="sub-pane-title">Ordem das Músicas</h5>
+                <h5 class="sub-pane-title">{{ $t('setlists.songOrder') }}</h5>
                 
                 <div v-if="loadingSongs" class="pane-loading">
                   <span class="spinner"></span>
@@ -726,21 +726,21 @@ onMounted(() => {
               <!-- MÚSICAS DISPONÍVEIS PARA ADICIONAR -->
               <div class="available-songs-pane">
                 <div class="sub-pane-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-                  <h5 class="sub-pane-title" style="margin: 0;">Acervo</h5>
+                  <h5 class="sub-pane-title" style="margin: 0;">{{ $t('setlists.library') }}</h5>
                   <div class="search-small">
                     <Search :size="14" class="search-icon-small" />
                     <input 
                       v-model="searchAcervo" 
                       type="text" 
-                      placeholder="Buscar música..." 
+                      :placeholder="$t('setlists.searchLibrary')" 
                       class="input-search-small"
                     />
                   </div>
                 </div>
 
                 <div v-if="filteredAcervo.length === 0" class="pane-empty">
-                  <span v-if="searchAcervo">Nenhuma música encontrada na busca.</span>
-                  <span v-else>Nenhuma música cadastrada no acervo.</span>
+                  <span v-if="searchAcervo">{{ $t('setlists.noSongsSearch') }}</span>
+                  <span v-else>{{ $t('setlists.noSongsLibrary') }}</span>
                 </div>
                 <div v-else class="available-songs-list">
                   <div 

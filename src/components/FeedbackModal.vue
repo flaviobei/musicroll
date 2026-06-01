@@ -62,7 +62,8 @@ const closeModal = () => {
 </script>
 
 <template>
-  <div v-if="show" class="modal-overlay" @click.self="closeModal">
+  <Teleport to="body">
+    <div v-if="show" class="modal-overlay" @click.self="closeModal">
     <div class="modal-content glass-panel bounce-in">
       <div class="modal-header">
         <h3 class="gradient-text-primary">{{ $t("feedback.title") }}</h3>
@@ -129,7 +130,8 @@ const closeModal = () => {
         </form>
       </div>
     </div>
-  </div>
+    </div>
+  </Teleport>
 </template>
 
 <style scoped>
