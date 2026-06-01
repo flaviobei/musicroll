@@ -117,7 +117,7 @@ onMounted(() => {
           <h2 class="gradient-text-primary" style="margin-bottom: 0.25rem">
             {{
               $t("dashboard.welcome", {
-                name: user?.email?.split("@")[0] || "Músico",
+                name: user?.user_metadata?.display_name || user?.email?.split("@")[0] || "Músico",
               })
             }}
           </h2>
@@ -126,10 +126,10 @@ onMounted(() => {
         </div>
         <div class="header-buttons">
           <button @click="showUpdatesModal = true" class="btn-updates">
-            <Info :size="16" /> Novidades
+            <Info :size="16" /> {{ $t("updates.button") }}
           </button>
           <button @click="showFeedbackModal = true" class="btn-updates">
-            <MessageSquare :size="16" /> Sugestões
+            <MessageSquare :size="16" /> {{ $t("feedback.button") }}
           </button>
         </div>
       </div>
@@ -207,16 +207,16 @@ onMounted(() => {
                   {{ song.title }}
                   <span
                     v-if="Number(song.bpm || 120) > 180"
-                    title="Acima de 180 BPM"
+                    :title="$t('songs.over180Bpm')"
                     >🌶️</span
                   >
                 </span>
                 <span class="recent-subtitle">
                   {{ song.artist }} | {{ song.bpm }} BPM
-                  <span v-if="song.tone">| Tom: {{ song.tone }}</span>
+                  <span v-if="song.tone">| {{ $t('songForm.tone') }}: {{ song.tone }}</span>
                 </span>
               </div>
-              <button class="btn-icon-only text-primary" title="Tocar Agora">
+              <button class="btn-icon-only text-primary" :title="$t('dashboard.playNow')">
                 <Play :size="16" />
               </button>
             </div>
@@ -248,7 +248,7 @@ onMounted(() => {
                   )
                 }}</span>
               </div>
-              <button class="btn-icon-only text-primary" title="Iniciar Show">
+              <button class="btn-icon-only text-primary" :title="$t('setlists.playShow')">
                 <Play :size="16" />
               </button>
             </div>

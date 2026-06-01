@@ -37,10 +37,12 @@ defineEmits(['close'])
 .modal-content {
   width: 100%;
   max-width: 500px;
+  max-height: min(85vh, 600px);
   padding: 2rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  overflow: hidden;
 }
 
 .modal-header {
@@ -49,6 +51,7 @@ defineEmits(['close'])
   align-items: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding-bottom: 1rem;
+  flex-shrink: 0;
 }
 
 .modal-body {
@@ -57,5 +60,18 @@ defineEmits(['close'])
   gap: 1rem;
   color: var(--text-muted);
   line-height: 1.6;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+@media (max-width: 480px) {
+  .modal-overlay {
+    padding: 0.5rem;
+  }
+  .modal-content {
+    padding: 1.25rem;
+    gap: 1rem;
+    max-height: min(90vh, 600px);
+  }
 }
 </style>

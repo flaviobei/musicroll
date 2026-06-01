@@ -47,7 +47,7 @@ onUnmounted(() => {
           ref="inputRef"
           v-model="query"
           type="text"
-          placeholder="Buscar música ou artista..."
+          :placeholder="$t('songs.search')"
           class="spotlight-input"
         />
         <button @click="$emit('close')" class="btn-icon-only">
@@ -70,7 +70,7 @@ onUnmounted(() => {
         </div>
 
         <div v-if="filtered.length === 0" class="spotlight-empty">
-          Nenhuma música encontrada
+          {{ $t('songs.empty') }}
         </div>
       </div>
     </div>

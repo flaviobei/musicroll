@@ -320,7 +320,7 @@ const handleSubmit = async () => {
             @mousedown.prevent="handleTap" 
             @touchstart.prevent="handleTap"
             class="btn btn-primary pulse-glow btn-tap"
-            title="Clique no ritmo para descobrir o BPM"
+            :title="$t('songForm.tapTempoTooltip')"
           >
             👆 Tap Tempo
           </button>
@@ -341,11 +341,11 @@ const handleSubmit = async () => {
             {{ $t('songForm.content') }}
           </label>
           <div style="display: flex; align-items: center; gap: 0.4rem; background: rgba(15, 23, 42, 0.3); padding: 0.2rem; border-radius: var(--radius-sm); border: 1px solid rgba(255, 255, 255, 0.05);">
-            <button type="button" @click="applyTranspose(-1)" class="btn btn-secondary btn-icon-only" style="padding: 0.2rem;" title="- Tom">
+            <button type="button" @click="applyTranspose(-1)" class="btn btn-secondary btn-icon-only" style="padding: 0.2rem;" :title="$t('songForm.transposeDown')">
               <Minus :size="14" />
             </button>
-            <span style="font-size: 0.75rem; font-weight: 600; color: #c084fc;">Transpor (Definitivo)</span>
-            <button type="button" @click="applyTranspose(1)" class="btn btn-secondary btn-icon-only" style="padding: 0.2rem;" title="+ Tom">
+            <span style="font-size: 0.75rem; font-weight: 600; color: #c084fc;">{{ $t('songForm.transposePermanent') }}</span>
+            <button type="button" @click="applyTranspose(1)" class="btn btn-secondary btn-icon-only" style="padding: 0.2rem;" :title="$t('songForm.transposeUp')">
               <Plus :size="14" />
             </button>
           </div>
@@ -388,7 +388,7 @@ const handleSubmit = async () => {
         />
         <label for="is-public" class="form-label" style="margin: 0; cursor: pointer;">
           <Share2 :size="14" style="vertical-align: middle; margin-right: 4px;" />
-          Tornar esta cifra pública (acessível por link)
+          {{ $t('songForm.makePublic') }}
         </label>
       </div>
 

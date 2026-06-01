@@ -47,7 +47,7 @@ const parsedContent = (content) => {
       <div style="margin-bottom: 1.5rem;">
         <h2 class="gradient-text-primary">{{ song.title }}</h2>
         <p class="text-muted">{{ song.artist }}
-          <span v-if="song.tone"> · Tom: {{ song.tone }}</span>
+          <span v-if="song.tone"> · {{ $t('songForm.tone') }}: {{ song.tone }}</span>
           <span> · {{ song.bpm }} BPM</span>
         </p>
         <p v-if="song.notes" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
@@ -58,7 +58,7 @@ const parsedContent = (content) => {
       <pre class="chord-pre" v-html="parsedContent(song.content)"></pre>
 
       <div style="margin-top: 2rem; text-align: center; font-size: 0.8rem; color: var(--text-muted);">
-        Compartilhado via <a href="/" style="color: #c084fc;">MusicRoll</a>
+        {{ $t('app.sharedVia') }} <a href="/" style="color: #c084fc;">MusicRoll</a>
       </div>
     </div>
   </div>

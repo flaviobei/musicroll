@@ -390,14 +390,14 @@ onUnmounted(() => {
           <button
             @click="adjustSpeed(-0.1)"
             class="btn btn-secondary btn-icon-only"
-            title="Diminuir Velocidade"
+            :title="$t('songs.slowDown')"
           >
             <ArrowDown :size="16" />
           </button>
           <button
             @click="toggleScroll"
             :class="['btn', isScrolling ? 'btn-danger' : 'btn-primary']"
-            title="Play/Pause"
+            :title="$t('songs.playPause')"
           >
             <Pause v-if="isScrolling" :size="20" />
             <Play v-else :size="20" />
@@ -405,7 +405,7 @@ onUnmounted(() => {
           <button
             @click="adjustSpeed(0.1)"
             class="btn btn-secondary btn-icon-only"
-            title="Aumentar Velocidade"
+            :title="$t('songs.speedUp')"
           >
             <ArrowUp :size="16" />
           </button>
@@ -415,17 +415,17 @@ onUnmounted(() => {
           <button
             @click="transposeLevel--"
             class="btn btn-secondary btn-icon-only"
-            title="- Tom"
+            :title="$t('songForm.transposeDown')"
           >
             <Minus :size="16" />
           </button>
-          <div class="transpose-badge" title="Tom">
+          <div class="transpose-badge" :title="$t('songs.transposeBadge')">
             {{ transposeLevel > 0 ? '+' : '' }}{{ transposeLevel }}
           </div>
           <button
             @click="transposeLevel++"
             class="btn btn-secondary btn-icon-only"
-            title="+ Tom"
+            :title="$t('songForm.transposeUp')"
           >
             <Plus :size="16" />
           </button>
@@ -435,21 +435,21 @@ onUnmounted(() => {
           <button
             @click="fontSize = Math.max(0.8, fontSize - 0.1)"
             class="btn btn-secondary btn-icon-only"
-            title="Diminuir Fonte"
+            :title="$t('songs.decreaseFont')"
           >
             <ZoomOut :size="16" />
           </button>
           <button
             @click="fontSize = Math.min(2.5, fontSize + 0.1)"
             class="btn btn-secondary btn-icon-only"
-            title="Aumentar Fonte"
+            :title="$t('songs.increaseFont')"
           >
             <ZoomIn :size="16" />
           </button>
           <button
             @click="resetScroll"
             class="btn btn-secondary btn-icon-only"
-            title="Voltar ao Início"
+            :title="$t('songs.scrollTop')"
           >
             <RotateCcw :size="16" />
           </button>
@@ -477,7 +477,7 @@ onUnmounted(() => {
           <p class="countdown-label">{{ $t('songs.nextSongIn') }}</p>
           <span class="countdown-number">{{ countdownValue }}</span>
           <p class="countdown-next-title">{{ getNextSong()?.title }}</p>
-          <button @click="cancelCountdown" class="btn btn-secondary btn-sm">Cancelar</button>
+          <button @click="cancelCountdown" class="btn btn-secondary btn-sm">{{ $t('app.cancel') }}</button>
         </div>
       </div>
 
@@ -526,7 +526,7 @@ onUnmounted(() => {
             :disabled="!getPrevSong()"
             @click="playPrevSong"
             class="btn btn-secondary btn-icon-only btn-sm"
-            title="Música Anterior"
+            :title="$t('songs.prevSong')"
           >
             <SkipBack :size="18" />
           </button>
@@ -534,7 +534,7 @@ onUnmounted(() => {
             :disabled="!getNextSong()"
             @click="playNextSong"
             class="btn btn-primary btn-icon-only btn-sm"
-            title="Próxima Música"
+            :title="$t('songs.nextSongTooltip')"
           >
             <SkipForward :size="18" />
           </button>
@@ -594,7 +594,7 @@ onUnmounted(() => {
             v-if="song.is_public"
             @click.stop="copyShareLink(song)"
             class="btn-share-icon"
-            title="Copiar link público"
+            :title="$t('songs.copyPublicLink')"
           >
             <Link :size="14" />
           </button>
@@ -632,7 +632,7 @@ onUnmounted(() => {
               v-if="isDemo || (user && song.user_id === user.id)"
               @click="emit('edit-song', song)"
               class="btn btn-secondary btn-icon-only"
-              title="Editar Cifra"
+              :title="$t('songs.edit')"
               style="
                 background: rgba(168, 85, 247, 0.15);
                 border-color: rgba(168, 85, 247, 0.3);
@@ -645,7 +645,7 @@ onUnmounted(() => {
               v-if="isDemo || (user && song.user_id === user.id)"
               @click="deleteSong(song.id, song.user_id)"
               class="btn btn-danger btn-icon-only"
-              title="Excluir Cifra"
+              :title="$t('songs.delete')"
             >
               <Trash2 :size="16" />
             </button>

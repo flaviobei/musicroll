@@ -8,6 +8,7 @@ import SetlistManager from "./components/SetlistManager.vue";
 import Dashboard from "./components/Dashboard.vue";
 import AboutModal from "./components/AboutModal.vue";
 import EasterEggModal from "./components/EasterEggModal.vue";
+import ProfileModal from "./components/ProfileModal.vue";
 import SpotlightSearch from "./components/SpotlightSearch.vue";
 import PublicSongView from "./components/PublicSongView.vue";
 import {
@@ -43,7 +44,26 @@ const cycleLanguage = () => {
 const user = ref(null);
 const showAboutModal = ref(false);
 const showNerdModal = ref(false);
+const showProfileModal = ref(false);
 const currentView = ref("menu"); // views: menu, songs_list, song_create, setlists
+
+const getAvatarStyle = (usr) => {
+  const avatar = usr?.user_metadata?.avatar_url || "";
+  if (avatar.startsWith("preset:")) {
+    const presets = {
+      "preset:vocalist": { emoji: "🎤", gradient: "linear-gradient(135deg, #a855f7 0%, #6366f1 100%)" },
+      "preset:guitarist": { emoji: "🎸", gradient: "linear-gradient(135deg, #ef4444 0%, #f97316 100%)" },
+      "preset:bassist": { emoji: "🎸", gradient: "linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)" },
+      "preset:drummer": { emoji: "🥁", gradient: "linear-gradient(135deg, #10b981 0%, #059669 100%)" },
+      "preset:keyboardist": { emoji: "🎹", gradient: "linear-gradient(135deg, #ec4899 0%, #db2777 100%)" },
+      "preset:producer": { emoji: "🎧", gradient: "linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)" },
+      "preset:notegirl": { emoji: "🎵", gradient: "linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%)" },
+      "preset:cool": { emoji: "🕶️", gradient: "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)" }
+    };
+    return presets[avatar] || null;
+  }
+  return null;
+};
 const songToEdit = ref(null);
 const songListRef = ref(null);
 const showSpotlight = ref(false);
@@ -125,19 +145,41 @@ onMounted(() => {
     showInstallBanner.value = true;
   });
 
-  // Check session on mount
-  supabase.auth
-    .getSession()
-    .then(({ data: { session } }) => {
-      user.value = session?.user || null;
-    })
-    .catch((error) => {
-      console.warn("Erro ao verificar sessão:", error);
-    });
+  // Check session on mount or load demo profile
+  const isDemoMode = checkSupabaseConfigured() === false;
+  if (isDemoMode) {
+    const savedDemoUser = localStorage.getItem("musicroll_demo_user");
+    if (savedDemoUser) {
+      user.value = JSON.parse(savedDemoUser);
+    } else {
+      user.value = {
+        id: "demo-user-id",
+        email: "musico@musicroll.com",
+        user_metadata: {
+          display_name: "Flavio",
+          musical_role: "bassist",
+          avatar_url: "preset:bassist",
+          accept_emails: true
+        }
+      };
+      localStorage.setItem("musicroll_demo_user", JSON.stringify(user.value));
+    }
+  } else {
+    supabase.auth
+      .getSession()
+      .then(({ data: { session } }) => {
+        user.value = session?.user || null;
+      })
+      .catch((error) => {
+        console.warn("Erro ao verificar sessão:", error);
+      });
+  }
 
   // Escutar mudanças de autenticação
   supabase.auth.onAuthStateChange((_event, session) => {
-    user.value = session?.user || null;
+    if (checkSupabaseConfigured() === true) {
+      user.value = session?.user || null;
+    }
   });
 
   window.addEventListener("keydown", handleGlobalKey);
@@ -180,8 +222,12 @@ const handleAuthSuccess = (authUser) => {
 
 const handleLogout = async () => {
   try {
-    const { error } = await supabase.auth.signOut();
-    if (error) throw error;
+    if (checkSupabaseConfigured() === true) {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+    } else {
+      localStorage.removeItem("musicroll_demo_user");
+    }
     user.value = null;
     addToast({ type: "info", message: "Sessão encerrada com sucesso." });
     currentView.value = "menu";
@@ -293,7 +339,7 @@ const installApp = async () => {
     <header class="navbar glass-panel">
       <div class="nav-brand" @click="currentView = 'menu'">
         <h1 class="gradient-text">MusicRoll</h1>
-        <span class="version-tag" @click.stop="showNerdModal = true" style="cursor: pointer;" title="O que é isso?">v1.0 beta</span>
+        <span class="version-tag" @click.stop="showNerdModal = true" style="cursor: pointer;" :title="$t('app.whatIsThis')">v1.0 beta</span>
       </div>
 
       <nav class="nav-actions">
@@ -301,7 +347,7 @@ const installApp = async () => {
         <div
           v-if="!checkSupabaseConfigured()"
           class="status-warning"
-          title="Configure o arquivo .env para salvar em nuvem"
+          :title="$t('app.envWarning')"
         >
           <AlertCircle :size="14" />
           <span>{{ $t('app.demoMode') }}</span>
@@ -345,7 +391,7 @@ const installApp = async () => {
             <button
               @click="cycleLanguage"
               class="lang-btn"
-              title="Mudar Idioma"
+              :title="$t('app.changeLanguage')"
             >
               <span
                 class="fi"
@@ -361,12 +407,33 @@ const installApp = async () => {
           </div>
 
           <div class="user-menu">
-            <div class="user-avatar" :title="user.email">
-              <User :size="16" />
+            <div
+              class="user-avatar-clickable"
+              :title="user.email"
+              @click="showProfileModal = true"
+            >
+              <div
+                class="user-avatar"
+                :style="getAvatarStyle(user) ? { background: getAvatarStyle(user).gradient, border: 'none' } : {}"
+              >
+                <span v-if="getAvatarStyle(user)" class="avatar-emoji">
+                  {{ getAvatarStyle(user).emoji }}
+                </span>
+                <img
+                  v-else-if="user?.user_metadata?.avatar_url && user.user_metadata.avatar_url.startsWith('http')"
+                  :src="user.user_metadata.avatar_url"
+                  class="avatar-image"
+                  alt="Avatar"
+                />
+                <User v-else :size="14" />
+              </div>
+              <span class="user-nav-name">
+                {{ user?.user_metadata?.display_name || user?.email?.split('@')[0] }}
+              </span>
             </div>
             <button
               @click="handleLogout"
-              class="btn-icon"
+              class="btn-icon btn-logout"
               :title="$t('app.logout')"
             >
               <LogOut :size="18" />
@@ -514,6 +581,14 @@ const installApp = async () => {
       @close="showNerdModal = false"
     />
 
+    <!-- Profile Modal -->
+    <ProfileModal
+      v-if="showProfileModal"
+      :user="user"
+      @close="showProfileModal = false"
+      @show-notification="handleNotification"
+    />
+
     <SpotlightSearch
       v-if="showSpotlight"
       :songs="allSongs"
@@ -601,25 +676,64 @@ const installApp = async () => {
   color: var(--text-main);
 }
 
+.user-avatar-clickable {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 0.25rem 0.75rem 0.25rem 0.25rem;
+  border-radius: 9999px;
+  transition: all var(--transition-fast);
+}
+
+.user-avatar-clickable:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+}
+
 .user-avatar {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: rgba(139, 92, 246, 0.15);
   border: 1px solid rgba(139, 92, 246, 0.3);
   color: #c084fc;
-  cursor: default;
   flex-shrink: 0;
+  overflow: hidden;
+}
+
+.avatar-emoji {
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.user-nav-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-main);
+  max-width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .user-menu {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.75rem;
 }
 
 .btn-icon {

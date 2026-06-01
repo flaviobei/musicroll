@@ -49,10 +49,11 @@ defineEmits(["close"]);
 .modal-content {
   width: 100%;
   max-width: 500px;
-  max-height: 90vh;
+  max-height: min(85vh, 600px);
   display: flex;
   flex-direction: column;
   padding: 2rem;
+  overflow: hidden;
   animation: modalIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -61,6 +62,7 @@ defineEmits(["close"]);
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
+  flex-shrink: 0;
 }
 
 .modal-header h3 {
@@ -73,6 +75,20 @@ defineEmits(["close"]);
   padding-right: 0.5rem;
   color: var(--text-secondary);
   line-height: 1.6;
+  flex-grow: 1;
+}
+
+@media (max-width: 480px) {
+  .modal-overlay {
+    padding: 0.5rem;
+  }
+  .modal-content {
+    padding: 1.25rem;
+    max-height: min(90vh, 600px);
+  }
+  .modal-header {
+    margin-bottom: 1rem;
+  }
 }
 
 :deep(p) {

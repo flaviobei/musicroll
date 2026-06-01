@@ -537,7 +537,7 @@ onMounted(() => {
                   type="button" 
                   @click="$emit('navigate', 'song_create')" 
                   class="btn-link-action"
-                  title="Cadastrar Nova Cifra"
+                  :title="$t('setlists.newSongTooltip')"
                 >
                   + {{ $t('setlists.registerFirstSong') }}
                 </button>
@@ -577,10 +577,10 @@ onMounted(() => {
               >
                 <span class="set-name">📁 {{ set.name }}</span>
                 <div class="set-actions-sidebar">
-                  <button @click.stop="quickStartSetlist(set.id)" class="btn-quick-play" title="Iniciar Apresentação">
+                  <button @click.stop="quickStartSetlist(set.id)" class="btn-quick-play" :title="$t('setlists.startPresentation')">
                     <PlayCircle :size="16" />
                   </button>
-                  <button @click.stop="deleteSetlist(set.id)" class="btn-delete-set" title="Excluir Setlist">
+                  <button @click.stop="deleteSetlist(set.id)" class="btn-delete-set" :title="$t('setlists.deleteSetlist')">
                     <Trash2 :size="14" />
                   </button>
                 </div>
@@ -601,33 +601,33 @@ onMounted(() => {
                   @keyup.enter="saveEditName"
                   @keyup.esc="editingSetName = false"
                 />
-                <button @click="saveEditName" class="btn btn-primary btn-icon-only" title="Salvar"><Check :size="16" /></button>
-                <button @click="editingSetName = false" class="btn btn-secondary btn-icon-only" title="Cancelar"><X :size="16" /></button>
+                <button @click="saveEditName" class="btn btn-primary btn-icon-only" :title="$t('setlists.save')"><Check :size="16" /></button>
+                <button @click="editingSetName = false" class="btn btn-secondary btn-icon-only" :title="$t('app.cancel')"><X :size="16" /></button>
               </div>
               <div v-else>
                 <div style="display: flex; align-items: center; gap: 0.5rem;">
                   <h4>📂 {{ activeSetlist.name }}</h4>
-                  <button @click="startEditingName" class="btn-icon" style="padding: 0.2rem; color: var(--text-muted);" title="Renomear Setlist">
+                  <button @click="startEditingName" class="btn-icon" style="padding: 0.2rem; color: var(--text-muted);" :title="$t('setlists.renameSetlist')">
                     <Edit3 :size="16" />
                   </button>
                 </div>
-                <span class="song-count">{{ activeSetlistSongs.length }} música(s)</span>
+                <span class="song-count">{{ $t('setlists.songCount', { count: activeSetlistSongs.length }) }}</span>
               </div>
               <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: flex-end;">
                 <button 
                   @click="downloadSetlistText" 
                   class="btn btn-secondary" 
                   :disabled="activeSetlistSongs.length === 0"
-                  title="Baixar Setlist em Texto"
+                  :title="$t('setlists.downloadTitle')"
                 >
-                  <Download :size="16" style="margin-right: 0.25rem;" /> Baixar .txt
+                  <Download :size="16" style="margin-right: 0.25rem;" /> {{ $t('setlists.downloadTxt') }}
                 </button>
                 <button 
                   @click="startPresentation" 
                   class="btn btn-primary pulse-glow" 
                   :disabled="activeSetlistSongs.length === 0"
                 >
-                  ⚡ Iniciar Apresentação
+                  ⚡ {{ $t('setlists.startPresentation') }}
                 </button>
               </div>
             </div>
@@ -635,8 +635,8 @@ onMounted(() => {
             <!-- GRAFICO BPM E TONS (Fluxo de Energia) -->
             <div v-if="activeSetlistSongs.length > 0" class="bpm-flow-chart">
               <div class="bpm-chart-title">
-                Fluxo de Energia (BPM)
-                <span class="estimated-time">| Duração Estimada: {{ totalDuration }} min</span>
+                {{ $t('setlists.energyFlow') }}
+                <span class="estimated-time">| {{ $t('setlists.estimatedDuration', { time: totalDuration }) }}</span>
               </div>
               <TransitionGroup name="list-elastic" tag="div" class="bpm-chart-container">
                 <div 
@@ -703,7 +703,7 @@ onMounted(() => {
                     @dragend="onDragEnd($event)"
                     style="cursor: grab;"
                   >
-                    <div class="drag-handle" title="Arraste para reordenar">
+                    <div class="drag-handle" :title="$t('setlists.dragToReorder')">
                       <GripVertical :size="16" />
                     </div>
                     <div class="song-order-num">{{ index + 1 }}</div>
@@ -722,7 +722,7 @@ onMounted(() => {
                         @click="moveSong(index, -1)" 
                         :disabled="index === 0" 
                         class="btn-order" 
-                        title="Subir"
+                        :title="$t('setlists.moveUp')"
                       >
                         <ChevronUp :size="14" />
                       </button>
@@ -730,14 +730,14 @@ onMounted(() => {
                         @click="moveSong(index, 1)" 
                         :disabled="index === activeSetlistSongs.length - 1" 
                         class="btn-order" 
-                        title="Descer"
+                        :title="$t('setlists.moveDown')"
                       >
                         <ChevronDown :size="14" />
                       </button>
                       <button 
                         @click="removeSongFromSetlist(song.id)" 
                         class="btn-order btn-remove" 
-                        title="Remover"
+                        :title="$t('setlists.remove')"
                       >
                         <X :size="14" />
                       </button>
@@ -792,7 +792,7 @@ onMounted(() => {
                       v-if="!isSongAdded(song)"
                       @click="addSongToSetlist(song)" 
                       class="btn-add-song" 
-                      title="Adicionar à Setlist"
+                      :title="$t('setlists.addSongTooltip')"
                     >
                       <Plus :size="14" />
                     </button>
@@ -800,7 +800,7 @@ onMounted(() => {
                       v-else
                       disabled
                       class="btn-add-song added" 
-                      title="Já adicionada"
+                      :title="$t('setlists.alreadyAddedTooltip')"
                     >
                       <Check :size="14" />
                     </button>
