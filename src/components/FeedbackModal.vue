@@ -160,6 +160,13 @@ const closeModal = () => {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  align-items: center;
+}
+
 .modal-header {
   display: flex;
   justify-content: space-between;

@@ -70,6 +70,10 @@ const parsedContent = (content) => {
   margin: 2rem auto;
   padding: 2rem;
   border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 .chord-pre {
   white-space: pre-wrap;
