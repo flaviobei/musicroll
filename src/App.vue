@@ -304,7 +304,7 @@ const installApp = async () => {
           title="Configure o arquivo .env para salvar em nuvem"
         >
           <AlertCircle :size="14" />
-          <span>Modo Demo Local</span>
+          <span>{{ $t('app.demoMode') }}</span>
         </div>
 
         <template v-if="user">
@@ -392,10 +392,10 @@ const installApp = async () => {
         "
       >
         <h3 style="color: white; margin-bottom: 10px">
-          🚨 Erro Crítico (Debug)
+          {{ $t('app.errorTitle') }}
         </h3>
-        <p><strong>Mensagem:</strong> {{ fatalError.message }}</p>
-        <p><strong>Contexto:</strong> {{ fatalError.info }}</p>
+        <p><strong>{{ $t('app.errorMsg') }}</strong> {{ fatalError.message }}</p>
+        <p><strong>{{ $t('app.errorCtx') }}</strong> {{ fatalError.info }}</p>
         <pre
           v-if="isDev"
           style="
@@ -430,7 +430,7 @@ const installApp = async () => {
           <div class="back-bar mb-4">
             <button @click="handleCancelEdit" class="btn btn-secondary btn-sm">
               <ArrowLeft :size="16" />
-              <span>Voltar ao Menu Principal</span>
+              <span>{{ $t('app.backToMenu') }}</span>
             </button>
           </div>
           <SongForm
@@ -498,9 +498,9 @@ const installApp = async () => {
 
     <!-- Footer -->
     <footer class="app-footer">
-      <p>© 2026 MusicRoll. Desenvolvido por FLB.</p>
+      <p>{{ $t('app.footer') }}</p>
       <button @click="showAboutModal = true" class="btn-link-footer">
-        Sobre o App
+        {{ $t('app.aboutApp') }}
       </button>
     </footer>
 

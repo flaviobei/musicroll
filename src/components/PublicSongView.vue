@@ -35,12 +35,12 @@ const parsedContent = (content) => {
 <template>
   <div class="public-view glass-panel">
     <div v-if="loading" class="loading-state">
-      <span class="spinner"></span> Carregando cifra...
+      <span class="spinner"></span> {{ $t('public.loading') }}
     </div>
 
     <div v-else-if="notFound" class="empty-state">
-      <p>🔒 Esta cifra não existe ou não está pública.</p>
-      <a href="/" class="btn btn-primary" style="margin-top: 1rem;">Abrir MusicRoll</a>
+      <p>{{ $t('public.notFound') }}</p>
+      <a href="/" class="btn btn-primary" style="margin-top: 1rem;">{{ $t('public.openApp') }}</a>
     </div>
 
     <div v-else>

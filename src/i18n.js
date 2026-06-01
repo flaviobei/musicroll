@@ -13,6 +13,13 @@ const messages = {
       installAndroid: "Tenha o aplicativo na tela inicial do seu celular.",
       installIOS:
         'Para instalar no iPhone, clique no ícone Compartilhar do Safari e em "Adicionar à Tela de Início".',
+      demoMode: "Modo Demo Local",
+      backToMenu: "Voltar ao Menu Principal",
+      footer: "© 2026 MusicRoll. Desenvolvido por FLB.",
+      aboutApp: "Sobre o App",
+      errorTitle: "🚨 Erro Crítico (Debug)",
+      errorMsg: "Mensagem:",
+      errorCtx: "Contexto:",
     },
     about: {
       title: "Sobre o MusicRoll",
@@ -118,6 +125,10 @@ const messages = {
       edit: "Editar",
       back: "Voltar",
       confirmDelete: "Tem certeza que deseja excluir esta cifra?",
+      viewAndScroll: "Ver & Rolar",
+      nextInSetlist: "Próxima da Setlist",
+      nextSongIn: "Próxima música em",
+      nextSong: "Próxima Música ➔",
     },
     songForm: {
       newTitle: "Adicionar Nova Cifra",
@@ -165,6 +176,11 @@ const messages = {
       loginDesc:
         "As setlists são associadas à sua conta na nuvem para manter a segurança do banco.",
     },
+    public: {
+      loading: "Carregando cifra...",
+      notFound: "🔒 Esta cifra não existe ou não está pública.",
+      openApp: "Abrir MusicRoll",
+    },
   },
   en: {
     app: {
@@ -178,6 +194,13 @@ const messages = {
       installAndroid: "Get the app on your home screen.",
       installIOS:
         'To install on iPhone, tap the Share icon in Safari and select "Add to Home Screen".',
+      demoMode: "Local Demo Mode",
+      backToMenu: "Back to Main Menu",
+      footer: "© 2026 MusicRoll. Developed by FLB.",
+      aboutApp: "About the App",
+      errorTitle: "🚨 Critical Error (Debug)",
+      errorMsg: "Message:",
+      errorCtx: "Context:",
     },
     about: {
       title: "About MusicRoll",
@@ -283,6 +306,10 @@ const messages = {
       edit: "Edit",
       back: "Back",
       confirmDelete: "Are you sure you want to delete this song?",
+      viewAndScroll: "View & Scroll",
+      nextInSetlist: "Next in Setlist",
+      nextSongIn: "Next song in",
+      nextSong: "Next Song ➔",
     },
     songForm: {
       newTitle: "Add New Song",
@@ -330,6 +357,11 @@ const messages = {
       loginDesc:
         "Setlists are linked to your cloud account to keep your data safe.",
     },
+    public: {
+      loading: "Loading chord...",
+      notFound: "🔒 This chord does not exist or is not public.",
+      openApp: "Open MusicRoll",
+    },
   },
   es: {
     app: {
@@ -343,6 +375,13 @@ const messages = {
       installAndroid: "Obtén la aplicación en tu pantalla de inicio.",
       installIOS:
         'Para instalar en iPhone, toca el ícono Compartir en Safari y selecciona "Agregar a Inicio".',
+      demoMode: "Modo Demo Local",
+      backToMenu: "Volver al Menú Principal",
+      footer: "© 2026 MusicRoll. Desarrollado por FLB.",
+      aboutApp: "Sobre la App",
+      errorTitle: "🚨 Error Crítico (Debug)",
+      errorMsg: "Mensaje:",
+      errorCtx: "Contexto:",
     },
     about: {
       title: "Sobre MusicRoll",
@@ -449,6 +488,10 @@ const messages = {
       edit: "Editar",
       back: "Volver",
       confirmDelete: "¿Estás seguro de que quieres eliminar esta canción?",
+      viewAndScroll: "Ver & Desplazar",
+      nextInSetlist: "Siguiente en Setlist",
+      nextSongIn: "Siguiente canción en",
+      nextSong: "Siguiente Canción ➔",
     },
     songForm: {
       newTitle: "Añadir Nueva Canción",
@@ -495,6 +538,11 @@ const messages = {
       loginTitle: "Inicia sesión para crear setlists",
       loginDesc:
         "Los setlists están asociados a tu cuenta en la nube para mantener la seguridad.",
+    },
+    public: {
+      loading: "Cargando acorde...",
+      notFound: "🔒 Este acorde no existe o no es público.",
+      openApp: "Abrir MusicRoll",
     },
   },
 };

@@ -463,18 +463,18 @@ onUnmounted(() => {
         <!-- Próxima Música da Setlist (Se houver playlist ativa) -->
         <div v-if="getNextSong() && !isSetlistMode" class="next-song-footer">
           <div class="next-song-info">
-            <span class="next-song-label">Próxima da Setlist</span>
+            <span class="next-song-label">{{ $t('songs.nextInSetlist') }}</span>
             <span class="next-song-title">{{ getNextSong().title }}</span>
             <span class="song-artist">{{ getNextSong().artist }}</span>
           </div>
           <button @click="playNextSong" class="btn btn-next-song">
-            Próxima Música ➔
+            {{ $t('songs.nextSong') }}
           </button>
         </div>
 
         <!-- Countdown para próxima música -->
         <div v-if="countdownActive" class="countdown-overlay">
-          <p class="countdown-label">Próxima música em</p>
+          <p class="countdown-label">{{ $t('songs.nextSongIn') }}</p>
           <span class="countdown-number">{{ countdownValue }}</span>
           <p class="countdown-next-title">{{ getNextSong()?.title }}</p>
           <button @click="cancelCountdown" class="btn btn-secondary btn-sm">Cancelar</button>
@@ -559,9 +559,9 @@ onUnmounted(() => {
         <div class="sort-wrapper">
           <Filter class="sort-icon" :size="16" />
           <select v-model="sortBy" class="sort-select">
-            <option value="artist">Artista</option>
-            <option value="recent">Mais Recentes</option>
-            <option value="title">Nome da Música</option>
+            <option value="artist">{{ $t('songs.sortArtist') }}</option>
+            <option value="recent">{{ $t('songs.sortRecent') }}</option>
+            <option value="title">{{ $t('songs.sortTitle') }}</option>
           </select>
         </div>
       </div>
@@ -626,7 +626,7 @@ onUnmounted(() => {
               class="btn btn-primary btn-play-song"
             >
               <Eye :size="16" />
-              <span>Ver & Rolar</span>
+              <span>{{ $t('songs.viewAndScroll') }}</span>
             </button>
             <button
               v-if="isDemo || (user && song.user_id === user.id)"
