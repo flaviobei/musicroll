@@ -603,8 +603,7 @@ const installApp = async () => {
 .app-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  height: 100svh; /* Stable viewport height on mobile to prevent dynamic resizing */
+  height: 100%; /* Fill parent html/body height */
   max-width: 1400px;
   margin: 0 auto;
   padding: 1.5rem;
@@ -875,5 +874,15 @@ const installApp = async () => {
 
 .btn-link-footer:hover {
   color: var(--text-muted);
+}
+
+@media (max-width: 640px) {
+  .app-container {
+    padding: 0.75rem !important; /* Gained extra space horizontally & vertically */
+  }
+  .app-footer {
+    padding: 1rem 1rem 0.5rem !important; /* Minimize spacing on mobile */
+    margin-top: 1rem !important; /* Tighten layout vertical flow */
+  }
 }
 </style>

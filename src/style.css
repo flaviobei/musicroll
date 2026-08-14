@@ -44,7 +44,7 @@
 html,
 body {
   height: 100%;
-  height: 100svh;
+  height: 100dvh; /* Fill full height on mobile/PWA standalone without leaving gaps */
   overflow: hidden;
   overscroll-behavior: none;
 }
@@ -452,10 +452,9 @@ h6 {
 .player-panel {
   position: fixed;
   top: 0;
+  bottom: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  height: 100svh; /* Stable viewport height on mobile to prevent dynamic resizing and bottom clipping */
+  right: 0;
   z-index: 9999;
   border-radius: 0;
   border: none;
@@ -507,7 +506,7 @@ html.immersive-active {
     border: none !important;
     box-shadow: none !important;
     border-radius: 0 !important;
-    padding: 0.5rem !important;
+    padding: 0.25rem !important; /* Minimal padding to use maximum screen space */
   }
 
   .player-panel .player-controls {
@@ -515,6 +514,12 @@ html.immersive-active {
     flex-wrap: wrap;
     flex-direction: row;
     justify-content: space-between;
+    margin-bottom: 0.4rem !important; /* Compact spacing */
+  }
+
+  .player-panel .pre-container {
+    padding: 0.5rem !important; /* Minimize internal padding for chords scrolling */
+    margin-bottom: 0.4rem !important; /* Compact margin */
   }
   .player-panel .btn-play {
     flex: 1 1 100%;
