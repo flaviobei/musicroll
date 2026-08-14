@@ -939,9 +939,6 @@ onUnmounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  padding-bottom: 1.5rem;
-  margin-bottom: 1.5rem;
   flex-wrap: wrap;
   gap: 1rem;
 }
@@ -972,7 +969,6 @@ onUnmounted(() => {
 .player-controls {
   display: flex;
   gap: 1rem;
-  margin-bottom: 2rem;
   flex-wrap: wrap;
   align-items: center;
 }
@@ -999,15 +995,8 @@ onUnmounted(() => {
 }
 
 .pre-container {
-  max-height: 55vh;
   overflow-y: auto;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: var(--radius-sm);
-  background: rgba(0, 0, 0, 0.3);
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
   scroll-behavior: smooth;
-  /* IMPORTANTE para o Auto-Scroll Mobile: esconde o scrollbar mas permite rolagem */
   -ms-overflow-style: none; /* IE e Edge */
   scrollbar-width: none; /* Firefox */
 }

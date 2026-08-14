@@ -456,31 +456,62 @@ h6 {
   z-index: 9999;
   border-radius: 0;
   border: none;
-  background: hsl(224, 71%, 3%);
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
+  background: var(--bg-primary);
+  padding: 0;
+  display: block;
   box-shadow: none;
   touch-action: none; /* Prevent scroll propagation on mobile controls & margins */
   overscroll-behavior: none;
 }
 
-.player-panel .player-header {
-  padding-bottom: 0.75rem;
-  margin-bottom: 0.75rem;
+.player-panel .player-header,
+.player-panel .setlist-top-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  margin: 0 !important;
+  padding: 0.75rem 1rem !important;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: none !important;
 }
 
 .player-panel .player-controls {
-  margin-bottom: 1rem;
-  gap: 0.5rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  margin: 0 !important;
+  padding: 0.5rem 1rem !important;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .player-panel .pre-container {
-  flex: 1;
-  max-height: none;
-  height: 100%;
-  touch-action: pan-y; /* Enable vertical drag gestures for chords list */
-  overscroll-behavior-y: contain; /* Contain scrolling inside the chords area */
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  height: 100dvh;
+  width: 100%;
+  padding: 4.5rem 1rem 5rem 1rem !important;
+  margin: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  overflow-y: auto;
+  touch-action: pan-y;
+  overscroll-behavior-y: contain;
+  max-height: none !important;
 }
 
 .player-panel .chord-pre {
@@ -504,7 +535,7 @@ html.immersive-active {
     border: none !important;
     box-shadow: none !important;
     border-radius: 0 !important;
-    padding: 0.25rem !important; /* Minimal padding to use maximum screen space */
+    padding: 0 !important;
   }
 
   .player-panel .player-controls {
@@ -512,12 +543,10 @@ html.immersive-active {
     flex-wrap: wrap;
     flex-direction: row;
     justify-content: space-between;
-    margin-bottom: 0.4rem !important; /* Compact spacing */
   }
 
   .player-panel .pre-container {
-    padding: 0.5rem !important; /* Minimize internal padding for chords scrolling */
-    margin-bottom: 0.4rem !important; /* Compact margin */
+    padding: 4.5rem 0.5rem 5rem 0.5rem !important;
   }
   .player-panel .btn-play {
     flex: 1 1 100%;
@@ -624,7 +653,7 @@ html.immersive-active {
 /* Setlist Mode Immersive */
 .player-panel.setlist-mode {
   background: #000 !important; /* Pure black */
-  padding: 1.5rem;
+  padding: 0 !important;
 }
 
 .player-panel.setlist-mode .chord-pre {
