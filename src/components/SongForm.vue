@@ -222,6 +222,7 @@ const importFromUrl = async () => {
   try {
     const urlEncoded = encodeURIComponent(importUrl.value)
     const proxies = [
+      { url: `/api/proxy?url=${urlEncoded}`, type: 'text' }, // Nosso proxy Vercel interno (funciona em produção)
       { url: `https://api.allorigins.win/get?url=${urlEncoded}`, type: 'json' },
       { url: `https://corsproxy.io/?${urlEncoded}`, type: 'text' },
       { url: `https://api.codetabs.com/v1/proxy?quest=${urlEncoded}`, type: 'text' }
