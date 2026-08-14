@@ -208,15 +208,103 @@ const handleSubmit = async () => {
     loading.value = false
   }
 }
+
+const importUrl = ref('')
+const importingUrl = ref(false)
+
+const importFromUrl = async () => {
+  if (!importUrl.value || !importUrl.value.includes('http')) {
+    emit('show-notification', { type: 'error', message: 'Por favor, insira um link válido.' })
+    return
+  }
+
+  importingUrl.value = true
+  try {
+    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(importUrl.value)}`
+    const response = await fetch(proxyUrl)
+    
+    if (!response.ok) throw new Error('Falha ao conectar no proxy')
+    
+    const data = await response.json()
+    if (!data.contents) throw new Error('Página vazia recebida do proxy')
+
+    const parser = new DOMParser()
+    const doc = parser.parseFromString(data.contents, 'text/html')
+
+    // Extrair Título (h1.t1 no CifraClub)
+    const titleEl = doc.querySelector('h1.t1')
+    if (titleEl) {
+      title.value = titleEl.textContent.trim()
+    }
+
+    // Extrair Artista (h2.t3 no CifraClub)
+    const artistEl = doc.querySelector('h2.t3')
+    if (artistEl) {
+      artist.value = artistEl.textContent.trim()
+    }
+
+    // Extrair Tom (#cifra_tom no CifraClub)
+    const toneEl = doc.querySelector('#cifra_tom')
+    if (toneEl) {
+      const toneMatch = toneEl.textContent.match(/Tom:\s*(.*)/i)
+      if (toneMatch) {
+        tone.value = toneMatch[1].trim()
+      } else {
+        tone.value = toneEl.textContent.trim()
+      }
+    }
+
+    // Extrair Conteúdo (pre com class cifra_cnt)
+    const preEl = doc.querySelector('pre.cifra_cnt') || doc.querySelector('pre')
+    if (preEl) {
+      content.value = preEl.textContent // preserva quebras de linha e ignora tags <b> do CifraClub
+      emit('show-notification', { type: 'success', message: 'Cifra importada com sucesso!' })
+      importUrl.value = ''
+    } else {
+      throw new Error('Não foi possível encontrar a cifra na página fornecida.')
+    }
+
+  } catch (error) {
+    console.error('Erro na importação:', error)
+    emit('show-notification', { 
+      type: 'error', 
+      message: error.message || 'Erro ao importar cifra. Verifique o link e tente novamente.' 
+    })
+  } finally {
+    importingUrl.value = false
+  }
+}
 </script>
 
 <template>
   <div class="glass-panel form-card">
-    <div class="form-header">
-      <h3 class="gradient-text-primary">{{ songToEdit ? $t('songForm.editTitle') : $t('songForm.newTitle') }}</h3>
-      <button v-if="!songToEdit" @click="loadSample" type="button" class="btn btn-secondary btn-sm">
-        💡 {{ $t('songForm.loadSample') }}
-      </button>
+    <div class="form-header" style="flex-wrap: wrap; gap: 1rem;">
+      <h3 class="gradient-text-primary" style="margin: 0;">{{ songToEdit ? $t('songForm.editTitle') : $t('songForm.newTitle') }}</h3>
+      
+      <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+        <div v-if="!songToEdit" class="import-wrapper" style="display: flex; gap: 0.25rem;">
+          <input 
+            type="url" 
+            v-model="importUrl" 
+            placeholder="Link do CifraClub..." 
+            class="form-input form-input-sm import-input"
+            style="width: 200px; padding: 0.4rem 0.6rem; font-size: 0.8rem;"
+          />
+          <button 
+            type="button" 
+            @click="importFromUrl" 
+            class="btn btn-primary btn-sm"
+            :disabled="importingUrl || !importUrl"
+          >
+            <template v-if="importingUrl"><span class="spinner"></span></template>
+            <template v-else>Importar</template>
+          </button>
+        </div>
+
+        <button v-if="!songToEdit" @click="loadSample" type="button" class="btn btn-secondary btn-sm" title="Carregar música de exemplo">
+          💡 {{ $t('songForm.loadSample') }}
+        </button>
+      </div>
     </div>
 
     <form @submit.prevent="handleSubmit" class="song-form">
