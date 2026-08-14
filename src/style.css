@@ -763,7 +763,7 @@ html.immersive-active {
     padding: 0.4rem;
     padding-top: max(0.4rem, env(safe-area-inset-top, 0.4rem));
     gap: 0.2rem;
-    background: rgba(15, 23, 42, 0.9);
+    background: var(--bg-primary); /* solid to prevent text mixing */
   }
 
   .main-content {

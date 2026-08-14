@@ -1437,4 +1437,64 @@ onMounted(() => {
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 640px) {
+  .setlist-card {
+    padding: 0.5rem;
+    border: none;
+    box-shadow: none;
+    background: transparent;
+  }
+  
+  .active-set-pane {
+    gap: 1rem;
+  }
+  
+  .set-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .set-header > div:last-child {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  
+  .bpm-flow-chart {
+    padding: 0.75rem;
+    overflow-x: auto;
+  }
+  
+  .bpm-chart-container, .bpm-tone-sequence {
+    min-width: max-content;
+  }
+
+  .setlist-songs-pane, .available-songs-pane {
+    padding: 0.75rem;
+  }
+
+  .setlist-song-item, .available-song-item {
+    padding: 0.5rem;
+    gap: 0.5rem;
+  }
+  
+  .song-order-actions {
+    flex-direction: column;
+  }
+  
+  .btn-order {
+    padding: 0.2rem;
+  }
+
+  .song-info h6 {
+    max-width: 160px;
+    white-space: normal;
+  }
+  
+  .song-info p {
+    font-size: 0.7rem;
+    white-space: normal;
+  }
+}
 </style>
