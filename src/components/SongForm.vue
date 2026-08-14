@@ -261,26 +261,36 @@ const importFromUrl = async () => {
     const parser = new DOMParser()
     const doc = parser.parseFromString(htmlContent, 'text/html')
 
-    // Extrair Título (h1.t1 no CifraClub)
-    const titleEl = doc.querySelector('h1.t1')
-    if (titleEl) {
+    // Fallback: usar a tag <title> se h1/h2 falharem
+    const docTitle = doc.querySelector('title')?.textContent || ''
+    const titleParts = docTitle.split('-').map(p => p.trim())
+    
+    // Extrair Título (h1.t1 ou fallback)
+    const titleEl = doc.querySelector('h1.t1') || doc.querySelector('h1')
+    if (titleEl && titleEl.textContent) {
       title.value = titleEl.textContent.trim()
+    } else if (titleParts.length >= 1) {
+      title.value = titleParts[0]
     }
 
-    // Extrair Artista (h2.t3 no CifraClub)
+    // Extrair Artista (h2.t3 ou fallback)
     const artistEl = doc.querySelector('h2.t3')
-    if (artistEl) {
+    if (artistEl && artistEl.textContent) {
       artist.value = artistEl.textContent.trim()
+    } else if (titleParts.length >= 2) {
+      artist.value = titleParts[1]
     }
 
-    // Extrair Tom (#cifra_tom no CifraClub)
-    const toneEl = doc.querySelector('#cifra_tom')
+    // Extrair Tom (#cifra_tom ou texto contendo 'Tom:')
+    const toneEl = doc.querySelector('#cifra_tom a, #cifra_tom b, #cifra_tom') 
+                 || Array.from(doc.querySelectorAll('span, a, div')).find(el => el.textContent && el.textContent.includes('Tom:'))
     if (toneEl) {
-      const toneMatch = toneEl.textContent.match(/Tom:\s*(.*)/i)
+      const text = toneEl.textContent.trim()
+      const toneMatch = text.match(/Tom:\s*(.*)/i)
       if (toneMatch) {
         tone.value = toneMatch[1].trim()
       } else {
-        tone.value = toneEl.textContent.trim()
+        tone.value = text.replace('Tom:', '').trim()
       }
     }
 

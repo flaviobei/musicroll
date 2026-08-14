@@ -79,7 +79,7 @@ const handleGlobalKey = (e) => {
 
 const checkSupabaseConfigured = () => {
   const url = import.meta.env.VITE_SUPABASE_URL;
-  return url && !url.includes("seu-projeto-supabase");
+  return !!(url && !url.includes("seu-projeto-supabase"));
 };
 
 watch(user, async (newUser) => {
@@ -146,7 +146,7 @@ onMounted(() => {
   });
 
   // Check session on mount or load demo profile
-  const isDemoMode = checkSupabaseConfigured() === false;
+  const isDemoMode = !checkSupabaseConfigured();
   if (isDemoMode) {
     const savedDemoUser = localStorage.getItem("musicroll_demo_user");
     if (savedDemoUser) {
