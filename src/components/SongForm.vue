@@ -127,7 +127,7 @@ const handleSubmit = async () => {
       content: content.value,
       default_scroll_speed: Number((bpm.value / 120).toFixed(2)),
       bpm: Number(bpm.value),
-      duration: Number(duration.value),
+      duration: Number(String(duration.value).replace(',', '.')),
       tone: tone.value,
       notes: notes.value,
       is_public: isPublic.value,
