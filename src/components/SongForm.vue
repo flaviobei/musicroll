@@ -410,9 +410,10 @@ const importFromUrl = async () => {
             <input 
               id="song-duration" 
               type="number" 
-              min="1" 
+              min="0.5"
+              step="0.5"
               v-model="duration" 
-              placeholder="Ex: 4" 
+              placeholder="Ex: 4 ou 3.5" 
               class="form-input"
             />
           </div>
