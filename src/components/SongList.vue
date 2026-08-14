@@ -360,8 +360,10 @@ defineExpose({
 watch(activeSong, (newVal) => {
   if (newVal) {
     document.body.classList.add("immersive-active");
+    document.documentElement.classList.add("immersive-active");
   } else {
     document.body.classList.remove("immersive-active");
+    document.documentElement.classList.remove("immersive-active");
   }
 });
 
@@ -373,6 +375,7 @@ onUnmounted(() => {
   stopScroll();
   cancelCountdown();
   document.body.classList.remove("immersive-active");
+  document.documentElement.classList.remove("immersive-active");
 });
 </script>
 
