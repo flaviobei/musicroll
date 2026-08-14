@@ -603,20 +603,29 @@ const installApp = async () => {
 .app-container {
   display: flex;
   flex-direction: column;
-  height: 100%; /* Fill parent html/body height */
+  min-height: 100vh;
+  min-height: 100dvh;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 1.5rem;
-  overflow: hidden; /* Lock viewport and prevent dynamic toolbar resizing */
+  padding: 5rem 1.5rem 4rem 1.5rem;
 }
 
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-radius: var(--radius-md);
-  margin-bottom: 1.25rem;
+  border-radius: 0;
+  margin-bottom: 0;
   padding: 0.6rem 1.5rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .nav-brand {
@@ -762,9 +771,6 @@ const installApp = async () => {
 
 .main-content {
   flex: 1;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
 }
 
 /* Dashboard Grid Layout */
@@ -828,11 +834,19 @@ const installApp = async () => {
 
 .app-footer {
   text-align: center;
-  padding: 2.5rem 1rem 1rem;
+  padding: 0.75rem 1rem;
   font-size: 0.8rem;
   color: var(--text-muted);
   border-top: 1px solid rgba(255, 255, 255, 0.04);
-  margin-top: 3rem;
+  margin-top: auto;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .btn-close-toast {
@@ -878,11 +892,10 @@ const installApp = async () => {
 
 @media (max-width: 640px) {
   .app-container {
-    padding: 0.75rem !important; /* Gained extra space horizontally & vertically */
+    padding: 4.5rem 0.75rem 3.5rem 0.75rem !important;
   }
   .app-footer {
-    padding: 1rem 1rem 0.5rem !important; /* Minimize spacing on mobile */
-    margin-top: 1rem !important; /* Tighten layout vertical flow */
+    padding: 0.5rem !important;
   }
 }
 </style>
