@@ -603,10 +603,12 @@ const installApp = async () => {
 .app-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
+  height: 100svh; /* Stable viewport height on mobile to prevent dynamic resizing */
   max-width: 1400px;
   margin: 0 auto;
   padding: 1.5rem;
+  overflow: hidden; /* Lock viewport and prevent dynamic toolbar resizing */
 }
 
 .navbar {
@@ -761,6 +763,9 @@ const installApp = async () => {
 
 .main-content {
   flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Dashboard Grid Layout */
