@@ -220,16 +220,46 @@ const importFromUrl = async () => {
 
   importingUrl.value = true
   try {
-    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(importUrl.value)}`
-    const response = await fetch(proxyUrl)
-    
-    if (!response.ok) throw new Error('Falha ao conectar no proxy')
-    
-    const data = await response.json()
-    if (!data.contents) throw new Error('Página vazia recebida do proxy')
+    const urlEncoded = encodeURIComponent(importUrl.value)
+    const proxies = [
+      { url: `https://api.allorigins.win/get?url=${urlEncoded}`, type: 'json' },
+      { url: `https://corsproxy.io/?${urlEncoded}`, type: 'text' },
+      { url: `https://api.codetabs.com/v1/proxy?quest=${urlEncoded}`, type: 'text' }
+    ]
+
+    let htmlContent = null
+    let lastError = null
+
+    for (const proxy of proxies) {
+      try {
+        const response = await fetch(proxy.url)
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+        
+        if (proxy.type === 'json') {
+          const data = await response.json()
+          if (data.contents) {
+            htmlContent = data.contents
+            break // Success
+          }
+        } else {
+          const text = await response.text()
+          if (text && text.includes('<html')) {
+            htmlContent = text
+            break // Success
+          }
+        }
+      } catch (err) {
+        console.warn(`Proxy ${proxy.url} falhou:`, err)
+        lastError = err
+      }
+    }
+
+    if (!htmlContent) {
+      throw new Error(lastError ? lastError.message : 'Falha ao acessar a URL. O site pode estar bloqueando a conexão.')
+    }
 
     const parser = new DOMParser()
-    const doc = parser.parseFromString(data.contents, 'text/html')
+    const doc = parser.parseFromString(htmlContent, 'text/html')
 
     // Extrair Título (h1.t1 no CifraClub)
     const titleEl = doc.querySelector('h1.t1')
